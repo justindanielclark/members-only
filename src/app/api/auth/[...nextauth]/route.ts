@@ -17,7 +17,7 @@ export const authOptions: AuthOptions = {
     async signIn({ user, account, profile, email, credentials }) {
       // console.log("");
       // console.log("Callback: signIn");
-      // console.log({ user, account, profile, email, credentials });
+      console.log({ user, account, profile, email, credentials });
       return true;
     },
     async redirect({ url, baseUrl }) {
