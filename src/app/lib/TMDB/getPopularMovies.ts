@@ -12,7 +12,7 @@ const options: RequestInit = {
     Authorization: process.env.TMDB_AUTH_KEY as string,
   },
 };
-export default async function getPopularMovies(): Promise<Array<fetchedMovie>> {
+export default async function getPopularMovies(): Promise<Array<FetchedMovie>> {
   const fetches: Array<Promise<Response>> = [];
   for (let i = 1; i <= 5; i++) {
     const newURL = new URL(search);
@@ -28,12 +28,12 @@ export default async function getPopularMovies(): Promise<Array<fetchedMovie>> {
       }
       return null;
     })
-  )) as Array<fetchedPopularMovies | null>;
+  )) as Array<FetchedPopularMovies | null>;
 
   return jsonData.reduce((acc, cur) => {
     if (cur && cur.results) {
       cur.results.forEach((movie) => acc.push(movie));
     }
     return acc;
-  }, [] as Array<fetchedMovie>);
+  }, [] as Array<FetchedMovie>);
 }
