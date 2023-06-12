@@ -8,8 +8,8 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        slideLeft: "slideLeft 5s linear infinite",
-        slideRight: "slideRight 5s linear infinite",
+        slideLeft: "slideLeft 1s ease-in-out",
+        slideRight: "slideRight 1s linear",
       },
       keyframes: {
         slideLeft: {
@@ -28,6 +28,18 @@ module.exports = {
             transform: "translateX(193px)",
           },
         },
+      },
+      width: {
+        poster: "185px",
+      },
+      maxWidth: {
+        poster: "185px",
+      },
+      height: {
+        poster: "278px",
+      },
+      maxHeight: {
+        poster: "278px",
       },
     },
   },
