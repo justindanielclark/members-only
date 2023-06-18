@@ -24,8 +24,8 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
   }, [MenuContext.selectedID, movie.id]);
 
   return (
-    <li className="flex flex-col shrink-0 grow-0 w-poster max-w-poster bg-slate-700/50 rounded-lg overflow-hidden my-2 select-none">
-      <div className="relative h-fit">
+    <li className="flex flex-col shrink-0 grow-0 w-poster max-w-poster rounded-lg overflow-hidden my-2 select-none">
+      <div className="relative h-poster">
         <Image
           src={`https://image.tmdb.org/t/p/w185/${movie.poster_path}`}
           alt={movie.title}
@@ -33,6 +33,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
           width={preferredPosterSize.width}
           height={preferredPosterSize.height}
           priority={priority}
+          className="h-poster"
         />
         <div
           className="absolute top-2 right-2 p-2 bg-black rounded-full cursor-pointer z-20"
@@ -77,7 +78,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
           ) : undefined}
         </div>
       </div>
-      <div className="w-poster max-w-poster px-2 z-50 relative bg-slate-800 grow-1 h-24 max-h-24 min-h-24">
+      <div className="w-poster max-w-poster px-2 z-50 relative bg-slate-900 grow-1 h-24 max-h-24 min-h-24">
         <h2 className="text-xs w-full h-4 text-right mt-1">{new Date(movie.release_date).toLocaleDateString()}</h2>
         <h1 className="font-bold h-20 min-h-20 max-h-20 overflow-hidden">{movie.title}</h1>
       </div>
