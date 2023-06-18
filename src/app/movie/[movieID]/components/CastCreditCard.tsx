@@ -46,7 +46,7 @@ export default function CastCreditCard({ credit }: Props) {
       <article className="bg-black/20 hover:bg-black/30 rounded-lg overflow-hidden shadow-slate-700/40 shadow-md max-w-poster">
         {imageContent}
         <div className="p-2">
-          <h3 className="font-bold">{credit.name}</h3>
+          <h3 className="font-bold text-sm">{credit.name}</h3>
           {isCastCredit ? <p className="px-1 text-sm h-8 max-h-8">{(credit as CastCredit).character}</p> : undefined}
           {isCrewCredit ? (
             <p className="px-1 text-xs h-8 max-h-8">{(credit as ExpandedCrewCredit).jobs.join(", ")}</p>
