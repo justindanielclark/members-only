@@ -1,3 +1,8 @@
+type FetchMessage = {
+  message: string;
+  statusCode: number;
+};
+
 type FetchedPopularMovies = {
   page: number;
   results: Array<fetchedMovie>;
@@ -137,6 +142,7 @@ type CrewCredit = {
   department: string;
   job: string;
 };
+type ExpandedCrewCredit = Omit<CrewCredit, "job"> & { jobs: Array<string> };
 
 type MovieImages = {
   backdrops: Array<MovieImageData>;

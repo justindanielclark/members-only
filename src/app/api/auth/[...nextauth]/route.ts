@@ -1,6 +1,7 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
+import _mongo from "@/lib/mongoDB/_mongo";
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -15,9 +16,10 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      // console.log("");
-      // console.log("Callback: signIn");
-      // console.log({ user, account, profile, email, credentials });
+      console.log("");
+      console.log("Callback: signIn");
+      console.log({ user, account, profile, email, credentials });
+
       return true;
     },
     async redirect({ url, baseUrl }) {

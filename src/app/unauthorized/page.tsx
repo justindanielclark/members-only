@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import MainContainer from "../lib/sharedComponents/MainContainer";
+import MainContainer from "@/lib/sharedComponents/MainContainer";
 
 export default function Unauthorized() {
   const timerID = useRef<ReturnType<typeof setTimeout> | null>(null);

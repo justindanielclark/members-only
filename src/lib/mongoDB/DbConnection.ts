@@ -1,10 +1,8 @@
 import { MongoClient } from "mongodb";
 
-type DB_Return = MongoClient | null;
-
 const DbConnection = function () {
-  let db: DB_Return = null;
-  async function DbConnect(): Promise<DB_Return> {
+  let db: MongoClient;
+  async function DbConnect(): Promise<MongoClient> {
     try {
       let url = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@portfoliocluster.aewfysa.mongodb.net/?retryWrites=true&w=majority`;
       let _db = await MongoClient.connect(url);
@@ -19,18 +17,18 @@ const DbConnection = function () {
       process.on("SIGHUP", () => gracefulShutdown());
       return _db;
     } catch {
-      return null;
+      throw new Error('Unable to connect to MongoDb URL in DbConnection.ts')
     }
   }
-  async function get(): Promise<DB_Return> {
+  async function get(): Promise<MongoClient> {
     try {
-      if (db != null) {
+      if (db != undefined) {
         return db;
       }
       db = await DbConnect();
       return db;
     } catch {
-      return null;
+      throw new Error('Unable to connect to MongoDb URL in DbConnection.ts')
     }
   }
   return {

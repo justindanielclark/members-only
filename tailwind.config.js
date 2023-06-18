@@ -4,14 +4,33 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/lib/sharedComponents/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       animation: {
         slideLeft: "slideLeft 1s ease-in-out",
         slideRight: "slideRight 1s linear",
+        movieMenuCardUp: "movieCardUp 3s linear",
+        movieMenuCardDown: "movieCardDown 3s linear",
       },
       keyframes: {
+        movieMenuCardUp: {
+          "0%": {
+            top: "100%",
+          },
+          "100%": {
+            top: "0%",
+          },
+        },
+        movieMenuCardDown: {
+          "0%": {
+            top: "0%",
+          },
+          "100%": {
+            top: "100%",
+          },
+        },
         slideLeft: {
           "0%": {
             transform: "translateX(0px)",

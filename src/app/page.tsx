@@ -1,15 +1,14 @@
-import { authOptions } from "./api/auth/[...nextauth]/route";
-import { getServerSession } from "next-auth/next";
-import getPopularMovies from "./lib/TMDB/getPopularMovies";
+import getSessionOnServer from "@/lib/providers/getSessionOnServer";
+import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 import { redirect } from "next/navigation";
 import PosterSlider from "./components/PosterSlider";
-import MainContainer from "./lib/sharedComponents/MainContainer";
+import MainContainer from "@/lib/sharedComponents/MainContainer";
 
 export default async function Home() {
   let session,
     movies = [],
     moviePosters: Array<Array<Poster>> = [[], [], []];
-  session = await getServerSession(authOptions);
+  session = await getSessionOnServer();
   if (session) {
     redirect("/dashboard");
   } else {
@@ -21,17 +20,15 @@ export default async function Home() {
   }
   const content = (
     <MainContainer className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center items-stretch bg-slate-900/40 p-4">
-      <section className="w-full lg:w-1/3 order-1 relative">
-        <div className="w-full h-fit lg:absolute lg:top-1/2 lg:-translate-y-1/2 p-2">
-          <h1 className="font-bold text-6xl bg-slate-200 text-black p-2 mb-8">MovieBase</h1>
-          <div className="text-xl px-8 lg:p-0">
-            <p className="font-bold">A simple way to:</p>
-            <ul className="pl-2">
-              <li>- Catalogue which movies you want to see</li>
-              <li>- Track which movies you have seen</li>
-              <li>- Share both with friends</li>
-            </ul>
-          </div>
+      <section className="w-full lg:w-1/3 order-1">
+        <h1 className="font-bold text-6xl bg-slate-200 text-black p-2 mb-8">MovieBase</h1>
+        <div className="text-xl px-8 lg:p-0">
+          <p className="font-bold">A simple way to:</p>
+          <ul className="pl-2">
+            <li>- Catalogue which movies you want to see</li>
+            <li>- Track which movies you have seen</li>
+            <li>- Share both with friends</li>
+          </ul>
         </div>
       </section>
       <section className="w-full lg:w-2/3 order-2 my-4 p-4 rounded-lg">
@@ -39,13 +36,15 @@ export default async function Home() {
       </section>
       <section className="w-full lg:w-1/3 order-4 relative">
         <div className="w-full h-fit lg:absolute lg:top-1/2 lg:-translate-y-1/2 p-2">
-          <h1 className="font-bold text-3xl bg-slate-200 text-black p-2 mb-8">Lorem Ipsum</h1>
           <div className="text-xl px-8 lg:p-0">
-            <p className="font-bold">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit esse exercitationem quos quaerat
-              quod aliquid a ipsam vel, harum quasi! Voluptates, voluptatum illo! Commodi nesciunt repudiandae porro hic
-              quis voluptates?
-            </p>
+            <p className="font-bold">Elevate your movie watching:</p>
+            <p className="">Our database</p>
+            <ul className="list-disc pl-6">
+              <li>makes suggestions based on what is popular,</li>
+              <li>makes lookup a breeze,</li>
+              <li>and showcases which movies your friends are excited about seeing.</li>
+            </ul>
+            <p className="font-bold">MovieBase is your ultimate movie companion.</p>
           </div>
         </div>
       </section>

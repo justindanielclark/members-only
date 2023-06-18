@@ -1,10 +1,10 @@
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import MainContainer from "../lib/sharedComponents/MainContainer";
-import Search from "./Search/Search";
-import TopMovies from "./TopMovies/TopMovies";
-import getPopularMovies from "../lib/TMDB/getPopularMovies";
+import MainContainer from "@/lib/sharedComponents/MainContainer";
+import Search from "./components/Search";
+import TopMovies from "./components/TopMovies";
+import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 
 type Props = {};
 

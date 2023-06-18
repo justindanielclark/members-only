@@ -1,11 +1,21 @@
 @tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 :root{
   --primary: #44403c;
   --secondary: #fafafa;
 }
+
+@media (min-resolution: 1dppx) {
+  :root{font-size: 16px;}
+}
+@media (min-resolution: 2dppx) {
+  :root{font-size: 32px;}
+}
+@media (min-resolution: 3dppx) {
+  :root{font-size: 48px;}
+}
+
+
 * {
   scrollbar-width: .5rem;
   scrollbar-color: var(--secondary) var(--primary);
@@ -26,3 +36,6 @@
   border-radius: 14px;
   border: 3px solid var(--primary);
 }
+
+@tailwind components;
+@tailwind utilities;

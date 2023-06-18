@@ -1,5 +1,5 @@
 import "./globals.css";
-import NextAuthProvider from "./lib/providers/NextAuthProvider";
+import NextAuthProvider from "@/lib/providers/NextAuthProvider";
 import RootLayout from "./components/RootLayout";
 
 export const metadata = {

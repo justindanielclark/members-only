@@ -1,4 +1,4 @@
-export default async function getMovieDetails(movieID: number): Promise<MovieDetails | null> {
+export default async function getMovieDetails(movieID: number): Promise<MovieDetails | FetchMessage> {
   const search = new URL("https://api.themoviedb.org");
   search.pathname = `/3/movie/${movieID}`;
   search.searchParams.set("language", "en-US");
@@ -15,8 +15,14 @@ export default async function getMovieDetails(movieID: number): Promise<MovieDet
     if (response.ok) {
       return await response.json();
     }
-    return null;
+    return {
+      message: "There was an error retrieving the requested movie's details from the database",
+      statusCode: response.status,
+    };
   } catch {
-    return null;
+    return {
+      message: "The request to the server for the requested movie's details has failed",
+      statusCode: 500,
+    };
   }
 }
