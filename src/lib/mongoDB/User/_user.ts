@@ -1,20 +1,21 @@
+import { User } from "../../../../types/types";
 import getMovieDatabaseCollection from "../getMovieDatabaseCollection";
 import createUser from "./createUser";
+import retrieveUser from "./retrieveUser";
 import updateUser from "./updateUser";
 
 export async function getUserCollection() {
   const database = await getMovieDatabaseCollection();
   try {
-    return database.collection('Users');
+    return database.collection<User>("Users");
   } catch {
-    throw new Error('Unable to grab Users collection in getUser.ts')
+    throw new Error("Unable to grab Users collection in getUser.ts");
   }
-  
 }
-
 
 const exportable = {
   createUser,
+  retrieveUser,
   updateUser,
 };
 

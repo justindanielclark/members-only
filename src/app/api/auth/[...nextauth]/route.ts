@@ -19,8 +19,17 @@ export const authOptions: AuthOptions = {
       console.log("");
       console.log("Callback: signIn");
       console.log({ user, account, profile, email, credentials });
-
-      return true;
+      if (typeof user.email == "string" && account && account.provider) {
+        const u = await _mongo.user.retrieveUser(user.email, account.provider);
+        if (u == null) {
+          await _mongo.user.createUser(user.email, account.provider);
+          console.log("User Created");
+        } else {
+          console.log("User Found", u);
+        }
+        return true;
+      }
+      return false;
     },
     async redirect({ url, baseUrl }) {
       // console.log("");
