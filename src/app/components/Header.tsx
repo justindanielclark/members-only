@@ -4,9 +4,12 @@ import { signOut, signIn, useSession } from "next-auth/react";
 import React from "react";
 import GoogleSVG from "../../../public/GoogleLogo.svg";
 import GithubSVG from "../../../public/GithubLogo.svg";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 function Header() {
   const { data: session, status } = useSession();
+
   let content: JSX.Element;
   switch (status) {
     case "authenticated": {
@@ -57,7 +60,7 @@ function Header() {
       break;
     }
     case "loading": {
-      content = <></>;
+      content = <div>Loading...</div>;
       break;
     }
     default: {
@@ -67,7 +70,10 @@ function Header() {
   }
   return (
     <header className="bg-slate-900 border-b border-slate-600">
-      <div className="max-w-7xl mx-auto flex justify-end h-12 items-center">{content}</div>
+      <div className="max-w-7xl mx-auto flex justify-between h-12 items-center">
+        <Link href={session ? "/dashboard" : "/"}>Home</Link>
+        {content}
+      </div>
     </header>
   );
 }
