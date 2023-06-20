@@ -142,7 +142,7 @@ type CrewCredit = {
   department: string;
   job: string;
 };
-type ExpandedCrewCredit = Omit<CrewCredit, "job"> & { jobs: Array<string> };
+type ExpandedCrewCredit = Omit<CrewCredit, "job"> & { jobs: Array<string>; jobScore: number };
 
 type MovieImages = {
   backdrops: Array<MovieImageData>;

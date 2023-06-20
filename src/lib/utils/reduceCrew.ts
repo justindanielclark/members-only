@@ -4,31 +4,66 @@ export default function reduceCrew(arr: Array<CrewCredit>): Array<ExpandedCrewCr
     const lookup = acc.get(cur.name);
     //There Is No Entry Yet
     if (lookup == undefined) {
-      const modifiedEntry: ExpandedCrewCredit = {
+      const modifiedEntry: ExpandedCrewCredit & { job: string } = {
         ...cur,
+        jobScore: calculateJobScore(cur.job),
         jobs: [cur.job],
       };
-      acc.set(cur.name, { order: i, credit: modifiedEntry });
+      acc.set(cur.name, modifiedEntry);
     }
     //There Exists An Entry
     else {
       const modifiedEntry: ExpandedCrewCredit = {
-        ...lookup.credit,
-        jobs: [...lookup.credit.jobs, cur.job],
+        ...lookup,
+        jobs: [...lookup.jobs, cur.job],
+        jobScore: lookup.jobScore + calculateJobScore(cur.job),
       };
-      acc.set(cur.name, { order: i < lookup.order ? i : lookup.order, credit: modifiedEntry });
+      acc.set(cur.name, modifiedEntry);
     }
     return acc;
-  }, new Map<string /* name of person */, { order: number /* their highest ranking on crew billing */; credit: ExpandedCrewCredit }>());
+  }, new Map<string /* name of person */, ExpandedCrewCredit>());
 
-  const expandedCrewArray = Array.from(modifiedCrewMap.values())
-    .sort((a, b) => {
-      return a.order - b.order;
-    })
-    .reduce((acc, cur) => {
-      acc.push(cur.credit);
-      return acc;
-    }, [] as Array<ExpandedCrewCredit>);
-
+  const expandedCrewArray = Array.from(modifiedCrewMap.values()).sort((a, b) => {
+    return b.jobScore - a.jobScore;
+  });
   return expandedCrewArray;
+}
+
+function calculateJobScore(job: string): number {
+  switch (job.toLowerCase()) {
+    case "director": {
+      return 200;
+    }
+    case "original story": {
+      return 100;
+    }
+    case "writer": {
+      return 50;
+    }
+    case "executive producer": {
+      return 30;
+    }
+    case "producer": {
+      return 20;
+    }
+    case "director of photography": {
+      return 10;
+    }
+    case "original music composer": {
+      return 7;
+    }
+    case "casting": {
+      return 5;
+    }
+    case "script": {
+      return 4;
+    }
+    case "editor": {
+      return 3;
+    }
+    case "production manager": {
+      return 2;
+    }
+  }
+  return 1;
 }
