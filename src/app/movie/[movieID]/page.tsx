@@ -7,6 +7,8 @@ import { preferredPosterSize } from "@/lib/utils/preferredPosterSize";
 import CastCreditCard from "./components/CastCreditCard";
 import reduceCrew from "@/lib/utils/reduceCrew";
 import numberToCurrency from "@/lib/utils/numberToCurrency";
+import getSessionOnServer from "@/lib/providers/getSessionOnServer";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: {
@@ -15,6 +17,12 @@ type Props = {
 };
 
 export default async function MoviePage({ params: { movieID } }: Props) {
+  //Redirect if not logged in
+  const session = await getSessionOnServer();
+  if (session == null) {
+    redirect("/unauthorized");
+  }
+  //Redirect if param is not a number
   const id = Number.parseInt(movieID);
   if (Number.isNaN(id)) {
     notFound();
@@ -93,7 +101,8 @@ export default async function MoviePage({ params: { movieID } }: Props) {
             </div>
           );
         }
-      : () => {
+      : //Redirect if unable to find movie
+        () => {
           notFound();
         }
   )();
