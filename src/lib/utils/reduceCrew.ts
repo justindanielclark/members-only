@@ -37,8 +37,14 @@ function calculateJobScore(job: string): number {
     case "original story": {
       return 100;
     }
+    case "screenplay": {
+      return 50;
+    }
     case "writer": {
       return 50;
+    }
+    case "story": {
+      return 8;
     }
     case "executive producer": {
       return 30;
@@ -56,6 +62,9 @@ function calculateJobScore(job: string): number {
       return 5;
     }
     case "script": {
+      return 4;
+    }
+    case "characters": {
       return 4;
     }
     case "editor": {
