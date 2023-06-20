@@ -1,7 +1,6 @@
 import getMovieCredits from "@/lib/TMDB/getMovieCredits";
 import getMovieDetails from "@/lib/TMDB/getMovieDetails";
 import { SubMainContainer, mainContainerDefaultClasses } from "@/lib/sharedComponents/MainContainer";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { preferredPosterSize } from "@/lib/utils/preferredPosterSize";
@@ -26,24 +25,27 @@ export default async function MoviePage({ params: { movieID } }: Props) {
     !fetchedMovie.hasOwnProperty("message")
       ? () => {
           const movie = fetchedMovie as MovieDetails;
-          console.log({ fetchedMovie });
           return (
             <div
               id="hero_image"
               style={{
                 background: `linear-gradient(to bottom, rgba(0,0,0,0.7), 15%, rgba(0,0,0,0.8), 70%, rgba(0,0,0,0.7)), url("https://image.tmdb.org/t/p/original${movie.backdrop_path}")`,
                 backgroundSize: "cover",
-                backgroundPosition: "0% 30%",
+                backgroundPosition: "20% 30%",
               }}
               className=" w-full"
             >
-              <SubMainContainer className="py-10">
-                <h1 className="text-3xl font-bold pb-4">
-                  {`${movie.title}${movie.release_date ? " (" + new Date(movie.release_date).getFullYear() + ")" : ""}`}
-                </h1>
+              <SubMainContainer className="py-10 flex flex-row flex-wrap">
+                {/* Title, Rating, Runtime */}
+                <section className="basis-full">
+                  <h1 className="text-3xl font-bold pb-4">
+                    {`${movie.title}${
+                      movie.release_date ? " (" + new Date(movie.release_date).getFullYear() + ")" : ""
+                    }`}
+                  </h1>
+                </section>
                 {/* Rating, Release Date, Genres, Runtime */}
-                <div></div>
-                <div className="flex flex-row">
+                <section className="w-fit h-fit basis-fit">
                   <Image
                     src={`https://image.tmdb.org/t/p/w185/${movie.poster_path}`}
                     alt={`Movie poster for ${movie.title}`}
@@ -52,25 +54,24 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                     priority={true}
                   />
                   {/* TAGLINE AND MOVIE SUMMARY */}
-                  <div className="px-10">
+                </section>
+                {movie.tagline || movie.overview ? (
+                  <section className="flex-1 p-4">
                     {movie.tagline && movie.tagline !== "" ? (
                       <p className="italic text-lg">{`"${movie.tagline}"`}</p>
                     ) : undefined}
-                    <p className="px-4 italic">{movie.overview}</p>
-                    {movie.homepage ? (
-                      <p>
-                        Homepage: <Link href={movie.homepage}>{movie.homepage}</Link>
-                      </p>
-                    ) : undefined}
+                    {movie.overview ? <p className="px-4 italic">{movie.overview}</p> : undefined}
+                  </section>
+                ) : undefined}
+                {/* Original Language, Budget, Revenue, Keywords */}
+                <section className="flex flex-row basis-full gap-4">
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">Status:</h3>
+                    <p>{movie.status}</p>
                   </div>
-                  {/* Original Language, Budget, Revenue, Keywords */}
-                  <div>
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">Spoken Languages:</h3>
                     <p>
-                      <span className="block font-bold">Status:</span>
-                      {movie.status}
-                    </p>
-                    <p>
-                      <span className="block font-bold">Spoken Language:</span>
                       {movie.spoken_languages
                         .reduce((acc, cur) => {
                           acc.push(cur.english_name);
@@ -78,24 +79,22 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                         }, [] as Array<string>)
                         .join(", ")}
                     </p>
-                    <p>
-                      <span className="block font-bold">Budget:</span>
-                      {numberToCurrency(movie.budget)}
-                    </p>
-                    <p>
-                      <span className="block font-bold">Revenue:</span>
-                      {numberToCurrency(movie.revenue)}
-                    </p>
                   </div>
-                </div>
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">Budget:</h3>
+                    <p>{numberToCurrency(movie.budget)}</p>
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="font-bold">Revenue:</h3>
+                    <p>{numberToCurrency(movie.revenue)}</p>
+                  </div>
+                </section>
               </SubMainContainer>
             </div>
           );
         }
       : () => {
-          const movie = fetchedMovie as FetchMessage;
-          //TODO Redirect To Page That States Page Had Issue Loading Movie Content
-          return <div>MOVIE NOT FOUND</div>;
+          notFound();
         }
   )();
 
@@ -125,7 +124,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                 </div>
               </section>
               <section>
-                <h2 className="text-2xl font-bold mt-4">Top Billed Crew</h2>
+                <h2 className="text-2xl font-bold mt-4">Notable Crew</h2>
                 <div className="w-full h-fit relative">
                   <div
                     id="opacityScreenLeft"
