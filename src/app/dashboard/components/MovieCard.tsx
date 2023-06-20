@@ -60,19 +60,25 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                   Visit Page
                 </li>
               </Link>
-
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
                 Add To Watchlist
               </li>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
                 Add To Collection
               </li>
-              <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">Copy Link</li>
+              <li
+                className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.host}/movie/${movie.id}`);
+                }}
+              >
+                Copy Link To Page
+              </li>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
                 Recommend to Friend
               </li>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                Invite Friend to Watch
+                Mark as Seen
               </li>
             </ul>
           ) : undefined}
