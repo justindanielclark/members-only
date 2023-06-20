@@ -1,7 +1,14 @@
-//Only returns up to 20 movie Recommendations at the time
-export default async function getMovieRecommendations(movieID: number, page: number = 1): Promise<Array<FetchedMovie>> {
+const nothingFound: searchResults = {
+  page: 0,
+  results: [],
+  total_pages: 0,
+  total_results: 0,
+};
+
+export default async function searchMovieTitle(query: string, page: number): Promise<searchResults> {
   const search = new URL("https://api.themoviedb.org");
-  search.pathname = `/3/movie/${movieID}/recommendations`;
+  search.pathname = `/3/search/movie`;
+  search.searchParams.set("query", query);
   search.searchParams.set("language", "en-US");
   search.searchParams.set("page", page.toString());
 
@@ -15,14 +22,11 @@ export default async function getMovieRecommendations(movieID: number, page: num
   try {
     const response = await fetch(search, options);
     if (response.ok) {
-      const data = (await response.json()) as Recommendation;
-      if (data.results) {
-        return data.results;
-      }
-      return [];
+      const data = (await response.json()) as searchResults;
+      return data;
     }
-    return [];
+    return nothingFound;
   } catch {
-    return [];
+    return nothingFound;
   }
 }
