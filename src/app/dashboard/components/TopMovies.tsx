@@ -10,8 +10,8 @@ type TopMoviesProps = {
 export default function TopMovies({ movies }: TopMoviesProps) {
   const [selectedID, setSelectedID] = useState<undefined | number>(undefined);
   return (
-    <section className="">
-      <h1 className="text-2xl font-bold">Today{"'"}s Top Movies</h1>
+    <section className="m-2">
+      <h1 className="text-2xl font-bold">Today{"'"}s Top Movies:</h1>
       <ul className="flex flex-row overflow-x-scroll flex-nowrap justify-start gap-4">
         {movies.map((movie, idx) => (
           <MenuMovieContext.Provider
