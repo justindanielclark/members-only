@@ -1,4 +1,4 @@
-const nothingFound: searchResults = {
+export const nothingFound: searchResults = {
   page: 0,
   results: [],
   total_pages: 0,

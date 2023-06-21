@@ -1,18 +1,12 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 export default function Search() {
   const [searchTerm, setSearchTerm] = useState("");
-  const linkAddress = (() => {
-    const url = new URL(window.location.host);
-    url.pathname = "/search";
-    url.searchParams.set("page", "1");
-    url.searchParams.set("query", searchTerm);
-    return url.toString();
-  })();
+  const router = useRouter();
   return (
     <section className="relative h-48">
-      <div className="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4">
+      <form role="navigation" className="w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4">
         <h1 className="text-2xl text-center">
           Millions of movies to discover. <span className="font-bold block sm:inline">Explore now.</span>
         </h1>
@@ -26,13 +20,25 @@ export default function Search() {
             }}
             value={searchTerm}
           />
-          <Link href={linkAddress}>
-            <button role="navigation" className="inline-block basis-24 bg-green-800 px-2 py-1">
+          <button role="navigation" className="inline-block basis-24 bg-green-800 px-2 py-1" onClick={(e)=>{
+            e.preventDefault();
+            if(searchTerm !== "" && searchTerm.split('').reduce((acc, cur)=>{
+              if(cur !== " "){
+                acc += cur;
+              }
+              return acc;
+            }, "") !== ""){
+              const newURL = new URL(window.location.host);
+              newURL.searchParams.set('page', '1')
+              newURL.searchParams.set('query', searchTerm)
+              router.push(`/search?${newURL.searchParams.toString()}`)
+            }
+            return false;
+          }}>
               Search
             </button>
-          </Link>
         </div>
-      </div>
+      </form>
     </section>
   );
 }
