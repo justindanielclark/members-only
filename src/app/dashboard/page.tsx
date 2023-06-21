@@ -8,16 +8,13 @@ import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 import _mongo from "@/lib/mongoDB/_mongo";
 import UserMovieList from "./components/UserMovieLists";
 
-type Props = {};
-
-async function Dashboard({}: Props) {
+async function Dashboard() {
   let session, content;
   session = await getServerSession(authOptions);
 
   if (session === null) {
     redirect("/unauthorized");
   } else {
-    console.log(session.user);
     const movies = await getPopularMovies();
     const user = await _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string);
     content = (

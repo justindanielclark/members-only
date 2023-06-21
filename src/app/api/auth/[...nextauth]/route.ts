@@ -16,17 +16,18 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      console.log("");
-      console.log("Callback: signIn");
-      console.log({ user, account, profile, email, credentials });
+      // console.log("");
+      // console.log("Callback: signIn");
+      // console.log({ user, account, profile, email, credentials });
       if (typeof user.email == "string" && account && account.provider) {
         const u = await _mongo.user.retrieveUser(user.email, account.provider);
         if (u == null) {
           await _mongo.user.createUser(user.email, account.provider);
-          console.log("User Created");
-        } else {
-          console.log("User Found", u);
-        }
+          // console.log("User Created");
+        } 
+        // else {
+        //   console.log("User Found", u);
+        // }
         return true;
       }
       return false;
