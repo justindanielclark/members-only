@@ -50,15 +50,19 @@ module.exports = {
       },
       width: {
         poster: "185px",
+        smPoster: "93px",
       },
       maxWidth: {
         poster: "185px",
+        smPoster: "93px",
       },
       height: {
         poster: "278px",
+        smPoster: "139px",
       },
       maxHeight: {
         poster: "278px",
+        smPoster: "139px",
       },
     },
   },
