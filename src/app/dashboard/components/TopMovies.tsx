@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import MovieCard from "./MovieCard";
-import { MenuMovieContext } from "./MovieMenuContext";
+import MovieCard from "@/lib/sharedComponents/MovieCardListItem";
+import { MenuMovieContext } from "@/lib/sharedComponents/MenuMovieContext";
 
 type TopMoviesProps = {
   movies: Array<FetchedMovie>;

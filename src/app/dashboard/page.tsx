@@ -2,7 +2,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import MainContainer from "@/lib/sharedComponents/MainContainer";
-import Search from "./components/Search";
+import SearchBar from "@/lib/sharedComponents/SearchBar";
 import TopMovies from "./components/TopMovies";
 import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 import _mongo from "@/lib/mongoDB/_mongo";
@@ -19,7 +19,7 @@ async function Dashboard() {
     const user = await _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string);
     content = (
       <MainContainer>
-        <Search />
+        <SearchBar lastSearch="" />
         <TopMovies movies={movies} />
         <UserMovieList
           list={[]}

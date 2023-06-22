@@ -1,7 +1,7 @@
 "use client";
-import { MenuMovieContext } from "./MovieMenuContext";
+import { MenuMovieContext } from "@/lib/sharedComponents/MenuMovieContext";
 import { useState } from "react";
-import MovieCard from "./MovieCard";
+import MovieCard from "@/lib/sharedComponents/MovieCardListItem";
 type Props = {
   emptyRender: JSX.Element;
   listTitle: string;

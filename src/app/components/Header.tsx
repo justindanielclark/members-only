@@ -71,7 +71,7 @@ function Header() {
   return (
     <header className="bg-slate-900 border-b border-slate-600">
       <div className="max-w-7xl mx-auto flex justify-between h-12 items-center">
-        <Link href={session ? "/dashboard" : "/"}>Home</Link>
+        <Link href={session ? "/dashboard" : "/"}>MovieBase</Link>
         {content}
       </div>
     </header>

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import Image from "next/image";
+import ImageWithFallback from "@/lib/sharedComponents/FallbackImage";
 import { useEffect, useRef, useState } from "react";
 
 type Props = {
@@ -31,6 +31,7 @@ function PosterSlider({ posters, reversed }: Props) {
     };
   }, [animating]);
   const postersToRender: Array<Poster> = statePosters.slice(0, NUM_IMAGES);
+  console.log(postersToRender);
 
   const sliderContainerClasses = ["flex", "gap-2"];
   if (reversed) {
@@ -56,7 +57,7 @@ function PosterSlider({ posters, reversed }: Props) {
         }}
       >
         {postersToRender.map((poster) => (
-          <Image
+          <ImageWithFallback
             key={poster.id + "_" + poster.title}
             src={`https://image.tmdb.org/t/p/w185/${poster.poster_path}`}
             alt={poster.title}

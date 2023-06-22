@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useMenuMovieContext } from "./MovieMenuContext";
+import { useMenuMovieContext } from "./MenuMovieContext";
 import { FaEllipsisV as VerticalEllipsisIcon } from "react-icons/fa";
-import Image from "next/image";
 import { preferredPosterSize } from "@/lib/utils/preferredPosterSize";
 import Link from "next/link";
+import ImageWithFallback from "./FallbackImage";
 
 type MovieCardProps = {
   movie: FetchedMovie;
@@ -26,7 +26,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
   return (
     <li className="flex flex-col shrink-0 grow-0 w-poster max-w-poster rounded-lg overflow-hidden my-2 select-none">
       <div className="relative h-poster">
-        <Image
+        <ImageWithFallback
           src={`https://image.tmdb.org/t/p/w185/${movie.poster_path}`}
           alt={movie.title}
           crossOrigin=""
@@ -60,11 +60,16 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                   Visit Page
                 </li>
               </Link>
+              <Link href={`/movie/${movie.id}`} rel="noopener noreferrer" target="_blank">
+                <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
+                  Visit Page In New Tab
+                </li>
+              </Link>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
                 Add To Watchlist
               </li>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                Add To Collection
+                Mark as Seen
               </li>
               <li
                 className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer"
@@ -73,12 +78,6 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                 }}
               >
                 Copy Link To Page
-              </li>
-              <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                Recommend to Friend
-              </li>
-              <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                Mark as Seen
               </li>
             </ul>
           ) : undefined}
