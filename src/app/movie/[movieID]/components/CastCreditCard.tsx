@@ -42,7 +42,7 @@ export default function CastCreditCard({ credit }: Props) {
   })();
 
   return (
-    <Link href={`/cast/${credit.id}`} className="shrink-0 grow-0 my-4">
+    <Link href={`/person/${credit.id}`} className="shrink-0 grow-0 my-4">
       <article className="bg-black/20 hover:bg-black/30 rounded-lg overflow-hidden shadow-slate-700/40 shadow-md max-w-poster">
         {imageContent}
         <div className="p-2">

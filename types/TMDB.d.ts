@@ -1,3 +1,13 @@
+type FetchedData<T> =
+  | {
+      succeeded: true;
+      data: T;
+    }
+  | {
+      succeeded: false;
+      data: null;
+    };
+
 type FetchMessage = {
   message: string;
   statusCode: number;
@@ -8,6 +18,37 @@ type FetchedPopularMovies = {
   results: Array<fetchedMovie>;
   total_pages: number;
   total_results: number;
+};
+
+type MovieCredit = {
+  adult: boolean;
+  backdrop_path: string | null;
+  genre_ids: Array<number>;
+  id: number;
+  original_language: string;
+  original_title: string;
+  overview: string;
+  popularity: number;
+  poster_path: string | null;
+  release_date: string;
+  title: string;
+  video: boolean;
+  vote_average: number;
+  vote_count: number;
+  credit_id: string;
+  order: number;
+};
+type MovieCastCredit = {
+  character: string;
+} & MovieCredit;
+type MovieCrewCredit = {
+  department: string;
+  job: string;
+} & MovieCredit;
+type MovieCredits = {
+  cast: Array<MovieCastCredit>;
+  crew: Array<MovieCrewCredit>;
+  id: number;
 };
 
 type FetchedMovie = {
@@ -188,4 +229,21 @@ type MovieSearchResult = {
   video: boolean;
   vote_average: number;
   vote_count: number;
+};
+
+type PersonDetails = {
+  adult: boolean;
+  also_known_as: Array<string>;
+  biography: string;
+  birthday: string | null;
+  deathday: string | null;
+  gender: number;
+  homepage: string | null;
+  id: number;
+  imdb_id: string;
+  known_for_department: string;
+  name: string;
+  place_of_birth: string | null;
+  popularity: number;
+  profile_path: string | null;
 };

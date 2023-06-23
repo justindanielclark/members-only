@@ -54,7 +54,6 @@ export default async function MoviePage({ params: { movieID } }: Props) {
     getMovieCredits(id),
     getMovieRecommendations(id),
   ]);
-
   const MovieContent: JSX.Element = (
     !fetchedMovie.hasOwnProperty("message")
       ? () => {
@@ -71,12 +70,23 @@ export default async function MoviePage({ params: { movieID } }: Props) {
             >
               <SubMainContainer className="py-10 flex flex-col md:grid md:grid-cols-[185px_1fr] md:grid-rows-[auto_auto_auto]">
                 {/* Title, Rating, Runtime */}
-                <section className="md:col-span-2">
-                  <h1 className="text-3xl font-bold pb-4 px-2">
+                <section className="md:col-span-2 pb-4">
+                  <h1 className="text-3xl font-bold px-2">
                     {`${movie.title}${
                       movie.release_date ? " (" + new Date(movie.release_date).getFullYear() + ")" : ""
                     }`}
                   </h1>
+                  {movie.genres.length > 0 ? (
+                    <p className="px-4 text-sm">
+                      {movie.genres
+                        .reduce((acc, cur) => {
+                          acc.push(cur.name);
+                          return acc;
+                        }, [] as Array<string>)
+                        .join(" / ")}
+                    </p>
+                  ) : undefined}
+
                   {/* Rating, Release Date, Genres, Runtime */}
                 </section>
 
@@ -112,31 +122,37 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                   ) : undefined}
                   {/* Status, Lang, Budget, Revenue */}
                   <div className="flex flex-row gap-4 md:justify-end justify-center flex-wrap mt-4">
-                    <div className="flex flex-col">
-                      <h3 className="font-bold">Status:</h3>
-                      <p>{movie.status}</p>
-                    </div>
-                    <div className="flex flex-col">
-                      <h3 className="font-bold">Spoken Languages:</h3>
-                      <p>
-                        {movie.spoken_languages
-                          .reduce((acc, cur) => {
-                            acc.push(cur.english_name);
-                            return acc;
-                          }, [] as Array<string>)
-                          .join(", ")}
-                      </p>
-                    </div>
-                    {movie.budget !== 0 ? (
+                    <div className="flex flex-row gap-4 flex-wrap">
                       <div className="flex flex-col">
-                        <h3 className="font-bold">Budget:</h3>
-                        <p>{numberToCurrency(movie.budget)}</p>
+                        <h3 className="font-bold">Status:</h3>
+                        <p>{movie.status}</p>
                       </div>
-                    ) : undefined}
-                    {movie.revenue !== 0 ? (
                       <div className="flex flex-col">
-                        <h3 className="font-bold">Revenue:</h3>
-                        <p>{numberToCurrency(movie.revenue)}</p>
+                        <h3 className="font-bold">Spoken Languages:</h3>
+                        <p>
+                          {movie.spoken_languages
+                            .reduce((acc, cur) => {
+                              acc.push(cur.english_name);
+                              return acc;
+                            }, [] as Array<string>)
+                            .join(", ")}
+                        </p>
+                      </div>
+                    </div>
+                    {movie.budget !== 0 || movie.revenue !== 0 ? (
+                      <div className="flex flex-row gap-4 flex-wrap">
+                        {movie.budget !== 0 ? (
+                          <div className="flex flex-col">
+                            <h3 className="font-bold">Budget:</h3>
+                            <p>{numberToCurrency(movie.budget)}</p>
+                          </div>
+                        ) : undefined}
+                        {movie.revenue !== 0 ? (
+                          <div className="flex flex-col">
+                            <h3 className="font-bold">Revenue:</h3>
+                            <p>{numberToCurrency(movie.revenue)}</p>
+                          </div>
+                        ) : undefined}
                       </div>
                     ) : undefined}
                   </div>
@@ -156,45 +172,54 @@ export default async function MoviePage({ params: { movieID } }: Props) {
       ? () => {
           const { cast, crew } = fetchedCredits as Cast;
           const reducedCrew = reduceCrew(crew);
+
           return (
-            <SubMainContainer>
-              <section className="my-4">
-                <h2 className="text-2xl font-bold px-2">Top Billed Cast</h2>
-                <div className="w-full h-fit relative px-5">
-                  <div
-                    id="opacityScreenLeft"
-                    className="absolute h-full w-4 top-0 left-4 bg-gradient-to-r from-slate-800 to-slate-800/5 z-10"
-                  ></div>
-                  <div
-                    id="opacityScreenRight"
-                    className="absolute h-full w-4 top-0 right-4 bg-gradient-to-l from-slate-800 to-slate-800/5 z-10"
-                  ></div>
-                  <div className="flex flex-row overflow-y-hidden gap-4 px-5 relative">
-                    {cast.slice(0, 10).map((credit) => {
-                      return <CastCreditCard credit={credit} key={credit.id} />;
-                    })}
-                  </div>
-                </div>
-              </section>
-              <section className="mb-4">
-                <h2 className="text-2xl font-bold mt-4 px-2">Notable Crew</h2>
-                <div className="w-full h-fit relative px-5">
-                  <div
-                    id="opacityScreenLeft"
-                    className="absolute h-full w-4 top-0 left-4 bg-gradient-to-r from-slate-800 to-slate-800/5 z-10"
-                  ></div>
-                  <div
-                    id="opacityScreenRight"
-                    className="absolute h-full w-4 top-0 right-4 bg-gradient-to-l from-slate-800 to-slate-800/5 z-10"
-                  ></div>
-                  <div className="flex flex-row overflow-y-hidden gap-4 px-5 relative justify-start items-stretch">
-                    {reducedCrew.slice(0, reducedCrew.length >= 10 ? 10 : reducedCrew.length).map((credit) => {
-                      return <CastCreditCard credit={credit} key={credit.id} />;
-                    })}
-                  </div>
-                </div>
-              </section>
-            </SubMainContainer>
+            <>
+              {cast.length > 0 || reducedCrew.length > 0 ? (
+                <SubMainContainer>
+                  {cast.length > 0 ? (
+                    <section className="my-4">
+                      <h2 className="text-2xl font-bold px-2">Top Billed Cast</h2>
+                      <div className="w-full h-fit relative px-5">
+                        <div
+                          id="opacityScreenLeft"
+                          className="absolute h-full w-4 top-0 left-4 bg-gradient-to-r from-slate-800 to-slate-800/5 z-10"
+                        ></div>
+                        <div
+                          id="opacityScreenRight"
+                          className="absolute h-full w-4 top-0 right-4 bg-gradient-to-l from-slate-800 to-slate-800/5 z-10"
+                        ></div>
+                        <div className="flex flex-row overflow-y-hidden gap-4 px-5 relative">
+                          {cast.slice(0, 10).map((credit) => {
+                            return <CastCreditCard credit={credit} key={credit.id} />;
+                          })}
+                        </div>
+                      </div>
+                    </section>
+                  ) : undefined}
+                  {reducedCrew.length > 0 ? (
+                    <section className="my-4">
+                      <h2 className="text-2xl font-bold mt-4 px-2">Notable Crew</h2>
+                      <div className="w-full h-fit relative px-5">
+                        <div
+                          id="opacityScreenLeft"
+                          className="absolute h-full w-4 top-0 left-4 bg-gradient-to-r from-slate-800 to-slate-800/5 z-10"
+                        ></div>
+                        <div
+                          id="opacityScreenRight"
+                          className="absolute h-full w-4 top-0 right-4 bg-gradient-to-l from-slate-800 to-slate-800/5 z-10"
+                        ></div>
+                        <div className="flex flex-row overflow-y-hidden gap-4 px-5 relative justify-start items-stretch">
+                          {reducedCrew.slice(0, reducedCrew.length >= 10 ? 10 : reducedCrew.length).map((credit) => {
+                            return <CastCreditCard credit={credit} key={credit.id} />;
+                          })}
+                        </div>
+                      </div>
+                    </section>
+                  ) : undefined}
+                </SubMainContainer>
+              ) : undefined}
+            </>
           );
         }
       : () => {

@@ -1,5 +1,5 @@
 "use client";
-import Image, { ImageProps } from "next/image";
+import Image from "next/image";
 import { useState } from "react";
 import { BiUnlink } from "react-icons/bi";
 import { IconContext } from "react-icons";
