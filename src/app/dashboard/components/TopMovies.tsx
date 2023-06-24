@@ -12,7 +12,7 @@ export default function TopMovies({ movies }: TopMoviesProps) {
   return (
     <section className="m-2">
       <h1 className="text-2xl font-bold">Today{"'"}s Top Movies:</h1>
-      <ul className="flex flex-row overflow-x-scroll flex-nowrap justify-start gap-4">
+      <ul className="flex flex-row overflow-x-scroll flex-nowrap justify-start gap-4 bg-slate-700/20 py-2 px-4 rounded-lg">
         {movies.map((movie, idx) => (
           <MenuMovieContext.Provider
             value={{
