@@ -35,8 +35,8 @@ export default async function CastPage({ params: { personID } }: Props) {
     console.log(credits);
     return (
       <>
-        <h1 className="text-3xl font-bold my-4 text-center w-full md:text-left">{details.name}</h1>
-        <div className="flex flex-row gap-6 flex-wrap md:justify-start justify-center">
+        <h1 className="text-3xl font-bold mt-4 text-center w-full md:text-left">{details.name}</h1>
+        <section className="flex flex-row gap-6 flex-wrap md:justify-start justify-center my-4">
           <div className="h-poster max-h-poster w-poster max-w-poster">
             <ImageWithFallback
               src={`https://image.tmdb.org/t/p/w185/${details.profile_path}`}
@@ -113,10 +113,10 @@ export default async function CastPage({ params: { personID } }: Props) {
               </div>
             ) : undefined}
           </div>
-        </div>
+        </section>
         {details.biography !== null && details.biography !== "" ? (
           <section className="my-4">
-            <h2 className="text-2xl my-2 font-bold">Overview:</h2>
+            <h2 className="text-2xl my-2 font-bold px-2">Overview:</h2>
             <div>
               {details.biography.split("\n").map((chunk, idx) => (
                 <p className="text-sm indent-4 px-2 py-0.5" key={idx}>
@@ -128,9 +128,9 @@ export default async function CastPage({ params: { personID } }: Props) {
         ) : undefined}
         {/* CAST CREDITS */}
         {credits.cast.length > 0 ? (
-          <section className="my-4 bg-slate-400/10 p-2 rounded-lg">
+          <section className="my-4 p-2 rounded-lg">
             <h2 className="text-2xl my-2 font-bold">As Cast:</h2>
-            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden">
+            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden mx-10 py-2 bg-slate-400/10">
               {credits.cast
                 .map((credit) => {
                   return { ...credit, release_date: credit.release_date !== "" ? new Date(credit.release_date) : null };
@@ -173,9 +173,9 @@ export default async function CastPage({ params: { personID } }: Props) {
         ) : undefined}
         {/* CREW CREDITS */}
         {credits.crew.length > 0 ? (
-          <section className="mb-4 bg-slate-400/10 p-2 rounded-lg">
+          <section className="my-4 p-2 rounded-lg">
             <h2 className="text-2xl my-2 font-bold">As Crew:</h2>
-            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden">
+            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden mx-10 py-2 bg-slate-400/10">
               {credits.crew
                 .map((credit) => {
                   return { ...credit, release_date: credit.release_date !== "" ? new Date(credit.release_date) : null };
