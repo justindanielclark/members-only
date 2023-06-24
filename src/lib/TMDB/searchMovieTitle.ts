@@ -18,6 +18,9 @@ export default async function searchMovieTitle(query: string, page: number): Pro
       accept: "application/json",
       Authorization: process.env.TMDB_AUTH_KEY as string,
     },
+    next: {
+      revalidate: 86400,
+    },
   };
   try {
     const response = await fetch(search, options);

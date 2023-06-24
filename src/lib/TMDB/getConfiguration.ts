@@ -9,6 +9,9 @@ const options: RequestInit = {
     accept: "application/json",
     Authorization: process.env.TMDB_AUTH_KEY as string,
   },
+  next: {
+    revalidate: 86400,
+  },
 };
 
 export default async function getConfiguration(): Promise<Configuration | null> {

@@ -9,6 +9,9 @@ export default async function getMovieImages(movieID: number): Promise<MovieImag
       accept: "application/json",
       Authorization: process.env.TMDB_AUTH_KEY as string,
     },
+    next: {
+      revalidate: 86400,
+    },
   };
   try {
     const response = await fetch(search, options);
