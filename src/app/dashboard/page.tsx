@@ -17,8 +17,10 @@ async function Dashboard() {
   if (session === null) {
     redirect("/unauthorized");
   } else {
-    const movies = await getPopularMovies();
-    const user = await _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string);
+    const [movies, user] = await Promise.all([
+      getPopularMovies(),
+      _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string),
+    ]);
     if (user) {
       const { _id, ...simplifiedUser } = user;
       content = (
@@ -36,7 +38,7 @@ async function Dashboard() {
             />
             <UserMovieList
               list={[]}
-              emptyRender={emptyWatchlist("Seen", "Marking movies as 'Watched' will help fill this out.")}
+              emptyRender={emptyWatchlist("Seen", "Marking movies as 'Seen' will help fill this out.")}
               listTitle="Seen"
             />
           </UserContext>
@@ -55,9 +57,9 @@ async function Dashboard() {
 
 function emptyWatchlist(title: string, notice: string) {
   return (
-    <section className="m-2">
+    <section className="m-2 p-2">
       <h1 className="text-2xl font-bold">{title}:</h1>
-      <p>{notice}</p>
+      <p className="h-poster max-h-poster p-2">{notice}</p>
     </section>
   );
 }
