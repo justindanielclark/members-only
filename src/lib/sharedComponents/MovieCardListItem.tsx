@@ -5,6 +5,8 @@ import { FaEllipsisV as VerticalEllipsisIcon } from "react-icons/fa";
 import { preferredPosterSize } from "@/lib/utils/preferredPosterSize";
 import Link from "next/link";
 import ImageWithFallback from "./FallbackImage";
+import { useUserContext } from "../providers/UserProvider";
+import { useRouter } from "next/navigation";
 
 type MovieCardProps = {
   movie: FetchedMovie;
@@ -12,9 +14,38 @@ type MovieCardProps = {
 };
 
 export default function MovieCard({ movie, priority }: MovieCardProps) {
+  const router = useRouter();
+  const UserContext = useUserContext();
   const MenuContext = useMenuMovieContext();
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
-  const [menuIsTransitioning, setMenuIsTransitioning] = useState<boolean>(false);
+
+  const [watchListTransitioning, setWatchListTransitioning] = useState<boolean>(false);
+  const [seenListTransitioning, setSeenListTransitioning] = useState<boolean>(false);
+
+  const [isOnWatchList, setIsOnWatchList] = useState<boolean>(
+    (() => {
+      if (UserContext) {
+        const watchedList = UserContext.lists.find((list) => list.name === "Watch List");
+        if (watchedList) {
+          const indexOf = watchedList.movies.findIndex((item) => item == movie.id);
+          return !(indexOf == -1);
+        }
+      }
+      return false;
+    })()
+  );
+  const [isOnSeenList, setIsOnSeenList] = useState<boolean>(
+    (() => {
+      if (UserContext) {
+        const watchedList = UserContext.lists.find((list) => list.name === "Watched");
+        if (watchedList) {
+          const indexOf = watchedList.movies.findIndex((item) => item == movie.id);
+          return !(indexOf == -1);
+        }
+      }
+      return false;
+    })()
+  );
   useEffect(() => {
     if (MenuContext.selectedID === movie.id) {
       setMenuIsOpen(true);
@@ -53,7 +84,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
             menuIsOpen ? "top-0" : "top-full"
           }`}
         >
-          {menuIsOpen || menuIsTransitioning ? (
+          {menuIsOpen ? (
             <ul className="w-full flex flex-col">
               <Link href={`/movie/${movie.id}`}>
                 <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
@@ -66,10 +97,48 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                 </li>
               </Link>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                Add To Watchlist
+                <button
+                  className="w-full h-fit text-left"
+                  onClick={() => {
+                    if (UserContext) {
+                      const watchList = UserContext.lists.find((list) => list.name == "Watch List");
+                      if (watchList) {
+                        let newWatchlist;
+                        if (isOnWatchList) {
+                          newWatchlist = watchList.movies.filter((item) => item !== movie.id);
+                        } else {
+                          newWatchlist = [...watchList.movies, movie.id];
+                        }
+                        setWatchListTransitioning(true);
+                        fetch("/api/watchlist/", {
+                          body: JSON.stringify({
+                            lookup: UserContext.lookup,
+                            movies: newWatchlist,
+                          }),
+                          method: "PUT",
+                        })
+                          .then((res) => {
+                            if (res.ok) {
+                              if (isOnWatchList) {
+                                setIsOnWatchList(false);
+                              } else {
+                                setIsOnWatchList(true);
+                              }
+                            }
+                          })
+                          .finally(() => {
+                            setWatchListTransitioning(false);
+                            router.refresh();
+                          });
+                      }
+                    }
+                  }}
+                >
+                  {isOnWatchList ? "Remove From Watchlist" : "Add To Watchlist"}
+                </button>
               </li>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                Mark as Seen
+                {isOnSeenList ? "Remove From Seen" : "Mark as Seen"}
               </li>
               <li
                 className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer"

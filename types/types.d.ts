@@ -10,20 +10,9 @@ type User = {
 
 type List = {
   name: string;
-  movies: Array<MovieIDs>;
+  movies: Array<number>;
 };
 type Friend = {
   name: string;
   _id: ObjectId;
-};
-
-type MovieIDs = {
-  _id: ObjectId;
-  TMDB_ID: number;
-};
-
-type MovieList = {
-  name: string;
-  createdOn: Date;
-  movies: Array<MovieIDs>;
 };
