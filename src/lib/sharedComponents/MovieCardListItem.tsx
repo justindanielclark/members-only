@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useMenuMovieContext } from "./MenuMovieContext";
+import { MenuMovieContext, useMenuMovieContext } from "./MenuMovieContext";
 import { FaEllipsisV as VerticalEllipsisIcon } from "react-icons/fa";
 import { preferredPosterSize } from "@/lib/utils/preferredPosterSize";
 import Link from "next/link";
@@ -35,7 +35,6 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
       setMenuIsOpen(false);
     }
   }, [MenuContext.selectedID, movie.id]);
-
   return (
     <li className="flex flex-col shrink-0 grow-0 w-poster max-w-poster rounded-lg overflow-hidden my-2 select-none">
       <div className="relative h-poster">
@@ -78,9 +77,9 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                   Visit Page In New Tab
                 </li>
               </Link>
-              <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
+              <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
                 <button
-                  className="w-full h-fit text-left"
+                  className="w-full h-fit text-left p-2"
                   onClick={() => {
                     if (isOnWatchList) {
                       removeMovieFromWatchlist({ movieID: movie.id, lookup: UserContext.user.lookup })
@@ -91,6 +90,9 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                           throw new Error("Error removing movie from watchlist");
                         })
                         .then((data) => {
+                          if (MenuContext.setSelectedID && MenuContext.selectedID === movie.id) {
+                            MenuContext.setSelectedID(undefined);
+                          }
                           UserContext.removeWatchListMovie(movie.id);
                           router.refresh();
                         })
@@ -104,6 +106,9 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                           throw new Error("Error adding movie to watchlist");
                         })
                         .then((data) => {
+                          if (MenuContext.setSelectedID && MenuContext.selectedID === movie.id) {
+                            MenuContext.setSelectedID(undefined);
+                          }
                           UserContext.addWatchListMovie(movie.id);
                           router.refresh();
                         })
@@ -114,9 +119,9 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                   {isOnWatchList ? "Remove From Watchlist" : "Add To Watchlist"}
                 </button>
               </li>
-              <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
+              <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
                 <button
-                  className="w-full h-fit text-left"
+                  className="w-full h-fit text-left p-2"
                   onClick={() => {
                     if (isOnSeenList) {
                       removeMovieFromSeenlist({ movieID: movie.id, lookup: UserContext.user.lookup })
@@ -150,9 +155,9 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                   {isOnSeenList ? "Unmark as Seen" : "Mark as Seen"}
                 </button>
               </li>
-              <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
+              <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
                 <button
-                  className="w-full text-left"
+                  className="w-full text-left p-2"
                   role="navigation"
                   onClick={() => {
                     navigator.clipboard.writeText(`${window.location.host}/movie/${movie.id}`);
@@ -166,8 +171,12 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
         </div>
       </div>
       <div className="w-poster max-w-poster px-2 z-50 relative bg-slate-900 grow-1 h-24 max-h-24 min-h-24">
-        <h2 className="text-xs w-full h-4 text-right mt-1">{new Date(movie.release_date).toLocaleDateString()}</h2>
-        <h1 className="font-bold h-20 min-h-20 max-h-20 overflow-hidden">{movie.title}</h1>
+        {movie.release_date !== "" ? (
+          <h2 className="text-xs w-full h-4 text-right mt-1">{new Date(movie.release_date).toLocaleDateString()}</h2>
+        ) : undefined}
+        <h1 className={`font-bold h-20 min-h-20 max-h-20 overflow-hidden ${movie.release_date == "" ? "mt-4" : ""}`}>
+          {movie.title}
+        </h1>
       </div>
     </li>
   );
