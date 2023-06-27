@@ -19,9 +19,7 @@ async function Dashboard() {
   if (session === null) {
     redirect("/unauthorized");
   } else {
-    const [user] = await Promise.all([
-      _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string),
-    ]);
+    const user = await _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string);
     if (user) {
       content = (
         <MainContainer>

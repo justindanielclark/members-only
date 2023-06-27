@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MenuMovieContext, useMenuMovieContext } from "./MenuMovieContext";
+import { useMenuMovieContext } from "./MenuMovieContext";
 import { FaEllipsisV as VerticalEllipsisIcon } from "react-icons/fa";
 import { preferredPosterSize } from "@/lib/utils/preferredPosterSize";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import addMovieToWatchlist from "../api/addMovieToWatchlist";
 import removeMovieFromWatchlist from "../api/removeMovieFromWatchlist";
 import addMovieToSeenList from "../api/addMovieToSeenList";
 import removeMovieFromSeenlist from "../api/removeMovieFromSeenList";
+import { toast } from "react-toastify";
 
 type MovieCardProps = {
   movie: FetchedMovie;
@@ -22,6 +23,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
   const router = useRouter();
   const UserContext = useUserContext();
   const MenuContext = useMenuMovieContext();
+
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const isOnWatchList =
     getUserListByName(UserContext.user, "Watch List").movies.findIndex((item) => item == movie.id) !== -1;
@@ -59,7 +61,6 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
         >
           <VerticalEllipsisIcon />
         </div>
-
         <div
           className={`w-full h-full bg-black z-10 absolute left-0 pt-10 duration-200 transition-all ${
             menuIsOpen ? "top-0" : "top-full"
@@ -161,6 +162,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                   role="navigation"
                   onClick={() => {
                     navigator.clipboard.writeText(`${window.location.host}/movie/${movie.id}`);
+                    toast("Copied");
                   }}
                 >
                   Copy Link To Page

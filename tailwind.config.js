@@ -15,6 +15,8 @@ module.exports = {
         movieMenuCardDown: "movieCardDown 3s linear",
         headerMenuUp: "headerMenuUp .15s linear",
         headerMenuDown: "headerMenuDown .15s linear",
+        toastAppear: "toastAppear .5s linear",
+        toastDisappear: "toastDisappear .5s linear",
       },
       keyframes: {
         movieMenuCardUp: {
@@ -67,6 +69,22 @@ module.exports = {
           },
           "100%": {
             transform: "translateX(193px)",
+          },
+        },
+        toastAppear: {
+          "0%": {
+            opacity: 0,
+          },
+          "100%": {
+            opacity: 1,
+          },
+        },
+        toastDisappear: {
+          "0%": {
+            opacity: 1,
+          },
+          "100%": {
+            opacity: 0,
           },
         },
       },
