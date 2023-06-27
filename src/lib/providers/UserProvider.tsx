@@ -1,7 +1,7 @@
 "use client";
 import cloneDeep from "clone-deep";
 import { User } from "../../../types/types";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { getUserListByName } from "../utils/getUserListByName";
 
 type Props = {
