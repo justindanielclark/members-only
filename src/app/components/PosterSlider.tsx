@@ -46,7 +46,7 @@ function PosterSlider({ posters, reversed }: Props) {
   }
 
   return (
-    <div className="overflow-hidden w-full max-w-full relative h-[278px]">
+    <div className="w-full max-w-full relative h-[278px] overflow-hidden">
       <div
         className={sliderContainerClasses.join(" ")}
         style={{ animationFillMode: "forwards" }}
@@ -56,16 +56,17 @@ function PosterSlider({ posters, reversed }: Props) {
         }}
       >
         {postersToRender.map((poster) => (
-          <ImageWithFallback
-            key={poster.id + "_" + poster.title}
-            src={`https://image.tmdb.org/t/p/w185/${poster.poster_path}`}
-            alt={poster.title}
-            crossOrigin=""
-            width={PREFERRED_POSTER_SIZE.width}
-            height={PREFERRED_POSTER_SIZE.height}
-            className="rounded-lg"
-            priority={true}
-          />
+          <div key={poster.id + "_" + poster.title} className="basis-auto shrink-0">
+            <ImageWithFallback
+              src={`https://image.tmdb.org/t/p/w185/${poster.poster_path}`}
+              alt={poster.title}
+              crossOrigin=""
+              width={PREFERRED_POSTER_SIZE.width}
+              height={PREFERRED_POSTER_SIZE.height}
+              className="rounded-lg w-poster h-poster"
+              priority={true}
+            />
+          </div>
         ))}
       </div>
     </div>
