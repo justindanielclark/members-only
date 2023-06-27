@@ -5,7 +5,7 @@ import MainContainer from "@/lib/sharedComponents/MainContainer";
 import { preferredProfileSize } from "@/lib/utils/preferredProfileSize";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import LinkIcon from "@/lib/sharedComponents/LinkIcon";
+import LinkIcon from "@/lib/sharedComponents/Icons/LinkIcon";
 
 type Props = {
   params: {

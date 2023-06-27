@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 import ImageWithFallback from "@/lib/sharedComponents/FallbackImage";
 import getMovieRecommendations from "@/lib/TMDB/getMovieRecommendations";
 import Recommendations from "./components/Recommendations";
-import LinkIcon from "@/lib/sharedComponents/LinkIcon";
+import LinkIcon from "@/lib/sharedComponents/Icons/LinkIcon";
 import Link from "next/link";
 import { Metadata } from "next";
 import UserContext from "@/lib/providers/UserProvider";
