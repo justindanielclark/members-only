@@ -10,9 +10,11 @@ module.exports = {
     extend: {
       animation: {
         slideLeft: "slideLeft 1s ease-in-out",
-        slideRight: "slideRight 1s linear",
+        slideRight: "slideRight 1s ease-in-out",
         movieMenuCardUp: "movieCardUp 3s linear",
         movieMenuCardDown: "movieCardDown 3s linear",
+        headerMenuUp: "headerMenuUp .15s linear",
+        headerMenuDown: "headerMenuDown .15s linear",
       },
       keyframes: {
         movieMenuCardUp: {
@@ -29,6 +31,26 @@ module.exports = {
           },
           "100%": {
             top: "100%",
+          },
+        },
+        headerMenuDown: {
+          "0%": {
+            bottom: "0",
+            transform: "translateY(0%)",
+          },
+          "100%": {
+            bottom: "-.125rem",
+            transform: "translateY(100%)",
+          },
+        },
+        headerMenuUp: {
+          "0%": {
+            bottom: "-.125rem",
+            transform: "translateY(100%)",
+          },
+          "100%": {
+            bottom: "0",
+            transform: "translateY(0%)",
           },
         },
         slideLeft: {
