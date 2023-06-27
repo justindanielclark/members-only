@@ -22,9 +22,10 @@ export const authOptions: AuthOptions = {
       if (typeof user.email == "string" && account && account.provider) {
         const u = await _mongo.user.retrieveUser(user.email, account.provider);
         if (u == null) {
-          await _mongo.user.createUser(user.email, account.provider);
+          const name = user.name === null || user.name === undefined ? "" : user.name;
+          await _mongo.user.createUser(user.email, account.provider, name);
           // console.log("User Created");
-        } 
+        }
         // else {
         //   console.log("User Found", u);
         // }

@@ -28,3 +28,9 @@ type Friend = {
   name: string;
   _id: ObjectId;
 };
+
+type Toast = {
+  id: string;
+  message: string;
+  submissionTime: Date;
+};
