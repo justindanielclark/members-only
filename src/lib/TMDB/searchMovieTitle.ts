@@ -19,7 +19,7 @@ export default async function searchMovieTitle(query: string, page: number): Pro
       Authorization: process.env.TMDB_AUTH_KEY as string,
     },
     next: {
-      revalidate: 86400,
+      revalidate: 900,
     },
   };
   try {

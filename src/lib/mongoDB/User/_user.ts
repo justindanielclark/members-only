@@ -2,7 +2,9 @@ import { User } from "../../../../types/types";
 import getMovieDatabaseCollection from "../getMovieDatabaseCollection";
 import createUser from "./createUser";
 import retrieveUser from "./retrieveUser";
+import retrieveUserByLookup from "./retrieveUserByLookup";
 import updateUserWatchedList from "./updateUserWatchedList";
+import updateUserSeenList from "./updateUserSeenList";
 
 export async function getUserCollection() {
   const database = await getMovieDatabaseCollection();
@@ -16,7 +18,9 @@ export async function getUserCollection() {
 const exportable = {
   createUser,
   retrieveUser,
+  retrieveUserByLookup,
   updateUserWatchedList,
+  updateUserSeenList,
 };
 
 export default exportable;

@@ -8,10 +8,22 @@ type User = {
   friends: Array<Friend>;
 };
 
+type ProviderUser = {
+  lookup: string;
+  handle: string;
+  friends: Array<Friend>;
+  lists: Array<CompleteList>;
+};
+
 type List = {
   name: string;
   movies: Array<number>;
 };
+type CompleteList = {
+  name: string;
+  movies: Array<FetchedMovie>;
+};
+
 type Friend = {
   name: string;
   _id: ObjectId;

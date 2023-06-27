@@ -8,7 +8,8 @@ import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 import _mongo from "@/lib/mongoDB/_mongo";
 import UserMovieList from "./components/UserMovieLists";
 import UserContext from "@/lib/providers/UserProvider";
-import { User } from "../../../types/types";
+import getAllMovies from "@/lib/TMDB/getAllMovies";
+import { getUserListByName } from "@/lib/utils/getUserListByName";
 
 async function Dashboard() {
   let session, content;
@@ -22,24 +23,40 @@ async function Dashboard() {
       _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string),
     ]);
     if (user) {
+      //MovieMap Loaded With Every Fetched Popular Movie
+      const movieMap = new Map<number, FetchedMovie>();
+      movies.forEach((movie) => movieMap.set(movie.id, movie));
+      //Split out the _id from the user, create a simplified user object
       const { _id, ...simplifiedUser } = user;
+      //Take the user's watch list and pull out any movie id's we've already requested in PopularMovies
+      const simpUserWatchList = getUserListByName(simplifiedUser, "Watch List");
+      const reducedSimpUserWatchList = [...simpUserWatchList.movies].reduce((acc, cur) => {
+        if (!movieMap.get(cur)) {
+          acc.push(cur);
+        }
+        return acc;
+      }, [] as Array<number>);
+      //Request the movies we haven't already requested
+      const fetchedUserWatchList = await getAllMovies(reducedSimpUserWatchList);
+      //Once we have them, add them into the movieMap for the dashboard
+      fetchedUserWatchList.forEach((movie) => movieMap.set(movie.id, movie));
       content = (
         <MainContainer>
           <SearchBar lastSearch="" />
-          <UserContext user={simplifiedUser}>
-            <TopMovies movies={movies} />
-            <UserMovieList
-              list={[]}
-              emptyRender={emptyWatchlist(
-                "Your Watchlist",
-                "You'll need to add movies to your watchlist to fill this out."
-              )}
-              listTitle="Your Watchlist"
+          <UserContext user={simplifiedUser} movieMap={movieMap}>
+            <TopMovies
+              movies={movies.reduce((acc, cur) => {
+                acc.push(cur.id);
+                return acc;
+              }, [] as Array<number>)}
             />
             <UserMovieList
-              list={[]}
-              emptyRender={emptyWatchlist("Seen", "Marking movies as 'Seen' will help fill this out.")}
-              listTitle="Seen"
+              list={simpUserWatchList.movies}
+              emptyRender={emptyWatchlist(
+                "Your Watchlist",
+                "This is currently empty. You'll need to add movies to your watchlist to fill this out."
+              )}
+              listTitle="Your Watchlist"
             />
           </UserContext>
         </MainContainer>

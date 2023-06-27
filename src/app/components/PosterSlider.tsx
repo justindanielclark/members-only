@@ -31,7 +31,6 @@ function PosterSlider({ posters, reversed }: Props) {
     };
   }, [animating]);
   const postersToRender: Array<Poster> = statePosters.slice(0, NUM_IMAGES);
-  console.log(postersToRender);
 
   const sliderContainerClasses = ["flex", "gap-2"];
   if (reversed) {

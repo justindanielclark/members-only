@@ -2,13 +2,16 @@
 import { useState } from "react";
 import MovieCard from "@/lib/sharedComponents/MovieCardListItem";
 import { MenuMovieContext } from "@/lib/sharedComponents/MenuMovieContext";
+import { useUserContext } from "@/lib/providers/UserProvider";
 
 type TopMoviesProps = {
-  movies: Array<FetchedMovie>;
+  movies: Array<number>;
 };
 
 export default function TopMovies({ movies }: TopMoviesProps) {
   const [selectedID, setSelectedID] = useState<undefined | number>(undefined);
+  const ctx = useUserContext();
+  const movieMap = new Map(ctx.movieMap);
   return (
     <section className="m-2">
       <h1 className="text-2xl font-bold">Today{"'"}s Top Movies:</h1>
@@ -25,9 +28,9 @@ export default function TopMovies({ movies }: TopMoviesProps) {
                 }
               },
             }}
-            key={movie.id}
+            key={movie}
           >
-            <MovieCard movie={movie} priority={idx < 10} />
+            <MovieCard movie={movieMap.get(movie) as FetchedMovie} priority={idx < 10} />
           </MenuMovieContext.Provider>
         ))}
       </ul>

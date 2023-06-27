@@ -13,11 +13,10 @@ const options: RequestInit = {
     Authorization: process.env.TMDB_AUTH_KEY as string,
   },
   next: {
-    revalidate: 86400,
+    revalidate: 900,
   },
 };
 export default async function getPopularMovies(): Promise<Array<FetchedMovie>> {
-  console.log("getPopularMovies is Running");
   try {
     const fetches: Array<Promise<Response>> = [];
     for (let i = 1; i <= 5; i++) {
@@ -35,7 +34,6 @@ export default async function getPopularMovies(): Promise<Array<FetchedMovie>> {
         return null;
       })
     )) as Array<FetchedPopularMovies | null>;
-    console.log("getPopularMovies has Ran");
     return jsonData.reduce((acc, cur) => {
       if (cur && cur.results) {
         cur.results.forEach((movie) => acc.push(movie));

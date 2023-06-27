@@ -32,7 +32,6 @@ export default async function CastPage({ params: { personID } }: Props) {
     if (details == null || credits == null) {
       notFound();
     }
-    console.log(credits);
     return (
       <>
         <h1 className="text-3xl font-bold mt-4 text-center w-full md:text-left">{details.name}</h1>

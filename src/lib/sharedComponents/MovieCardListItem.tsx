@@ -7,6 +7,11 @@ import Link from "next/link";
 import ImageWithFallback from "./FallbackImage";
 import { useUserContext } from "../providers/UserProvider";
 import { useRouter } from "next/navigation";
+import { getUserListByName } from "../utils/getUserListByName";
+import addMovieToWatchlist from "../api/addMovieToWatchlist";
+import removeMovieFromWatchlist from "../api/removeMovieFromWatchlist";
+import addMovieToSeenList from "../api/addMovieToSeenList";
+import removeMovieFromSeenlist from "../api/removeMovieFromSeenList";
 
 type MovieCardProps = {
   movie: FetchedMovie;
@@ -18,34 +23,11 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
   const UserContext = useUserContext();
   const MenuContext = useMenuMovieContext();
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
+  const isOnWatchList =
+    getUserListByName(UserContext.user, "Watch List").movies.findIndex((item) => item == movie.id) !== -1;
+  const isOnSeenList =
+    getUserListByName(UserContext.user, "Watched").movies.findIndex((item) => item == movie.id) !== -1;
 
-  const [watchListTransitioning, setWatchListTransitioning] = useState<boolean>(false);
-  const [seenListTransitioning, setSeenListTransitioning] = useState<boolean>(false);
-
-  const [isOnWatchList, setIsOnWatchList] = useState<boolean>(
-    (() => {
-      if (UserContext) {
-        const watchedList = UserContext.lists.find((list) => list.name === "Watch List");
-        if (watchedList) {
-          const indexOf = watchedList.movies.findIndex((item) => item == movie.id);
-          return !(indexOf == -1);
-        }
-      }
-      return false;
-    })()
-  );
-  const [isOnSeenList, setIsOnSeenList] = useState<boolean>(
-    (() => {
-      if (UserContext) {
-        const watchedList = UserContext.lists.find((list) => list.name === "Watched");
-        if (watchedList) {
-          const indexOf = watchedList.movies.findIndex((item) => item == movie.id);
-          return !(indexOf == -1);
-        }
-      }
-      return false;
-    })()
-  );
   useEffect(() => {
     if (MenuContext.selectedID === movie.id) {
       setMenuIsOpen(true);
@@ -100,37 +82,32 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                 <button
                   className="w-full h-fit text-left"
                   onClick={() => {
-                    if (UserContext) {
-                      const watchList = UserContext.lists.find((list) => list.name == "Watch List");
-                      if (watchList) {
-                        let newWatchlist;
-                        if (isOnWatchList) {
-                          newWatchlist = watchList.movies.filter((item) => item !== movie.id);
-                        } else {
-                          newWatchlist = [...watchList.movies, movie.id];
-                        }
-                        setWatchListTransitioning(true);
-                        fetch("/api/watchlist/", {
-                          body: JSON.stringify({
-                            lookup: UserContext.lookup,
-                            movies: newWatchlist,
-                          }),
-                          method: "PUT",
+                    if (isOnWatchList) {
+                      removeMovieFromWatchlist({ movieID: movie.id, lookup: UserContext.user.lookup })
+                        .then((res) => {
+                          if (res.ok) {
+                            return res.json();
+                          }
+                          throw new Error("Error removing movie from watchlist");
                         })
-                          .then((res) => {
-                            if (res.ok) {
-                              if (isOnWatchList) {
-                                setIsOnWatchList(false);
-                              } else {
-                                setIsOnWatchList(true);
-                              }
-                            }
-                          })
-                          .finally(() => {
-                            setWatchListTransitioning(false);
-                            router.refresh();
-                          });
-                      }
+                        .then((data) => {
+                          UserContext.removeWatchListMovie(movie.id);
+                          router.refresh();
+                        })
+                        .catch((err) => console.log(err.message));
+                    } else {
+                      addMovieToWatchlist({ movieID: movie.id, lookup: UserContext.user.lookup })
+                        .then((res) => {
+                          if (res.ok) {
+                            return res.json();
+                          }
+                          throw new Error("Error adding movie to watchlist");
+                        })
+                        .then((data) => {
+                          UserContext.addWatchListMovie(movie.id);
+                          router.refresh();
+                        })
+                        .catch((err) => console.log(err.message));
                     }
                   }}
                 >
@@ -138,15 +115,51 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                 </button>
               </li>
               <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                {isOnSeenList ? "Remove From Seen" : "Mark as Seen"}
+                <button
+                  className="w-full h-fit text-left"
+                  onClick={() => {
+                    if (isOnSeenList) {
+                      removeMovieFromSeenlist({ movieID: movie.id, lookup: UserContext.user.lookup })
+                        .then((res) => {
+                          if (res.ok) {
+                            return res.json();
+                          }
+                          throw new Error("Error removing movie from seenlist");
+                        })
+                        .then((data) => {
+                          UserContext.removeSeenListMovie(movie.id);
+                          router.refresh();
+                        })
+                        .catch((err) => console.log(err.message));
+                    } else {
+                      addMovieToSeenList({ movieID: movie.id, lookup: UserContext.user.lookup })
+                        .then((res) => {
+                          if (res.ok) {
+                            return res.json();
+                          }
+                          throw new Error("Error adding movie to seenlist");
+                        })
+                        .then((data) => {
+                          UserContext.addSeenListMovie(movie.id);
+                          router.refresh();
+                        })
+                        .catch((err) => console.log(err.message));
+                    }
+                  }}
+                >
+                  {isOnSeenList ? "Unmark as Seen" : "Mark as Seen"}
+                </button>
               </li>
-              <li
-                className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.host}/movie/${movie.id}`);
-                }}
-              >
-                Copy Link To Page
+              <li className="p-2 text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
+                <button
+                  className="w-full text-left"
+                  role="navigation"
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.host}/movie/${movie.id}`);
+                  }}
+                >
+                  Copy Link To Page
+                </button>
               </li>
             </ul>
           ) : undefined}

@@ -10,7 +10,7 @@ export default async function getMovieDetails(movieID: number): Promise<MovieDet
       Authorization: process.env.TMDB_AUTH_KEY as string,
     },
     next: {
-      revalidate: 86400,
+      revalidate: 900,
     },
   };
   try {
