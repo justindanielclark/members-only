@@ -10,6 +10,13 @@ import UserMovieList from "./components/UserMovieLists";
 import UserContext from "@/lib/providers/UserProvider";
 import getAllMovies from "@/lib/TMDB/getAllMovies";
 import { getUserListByName } from "@/lib/utils/getUserListByName";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "MovieBase: Dashboard",
+  };
+}
 
 async function Dashboard() {
   let session, content;

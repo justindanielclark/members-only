@@ -7,6 +7,7 @@ import SearchBar from "@/lib/sharedComponents/SearchBar";
 import Result from "./component/Result";
 import _mongo from "@/lib/mongoDB/_mongo";
 import UserContext from "@/lib/providers/UserProvider";
+import { Metadata } from "next";
 
 type UnconfirmedSearchParameters = {
   page?: string;
@@ -36,6 +37,12 @@ function confirmSearchParams(usp: UnconfirmedSearchParameters): SearchParameters
   return null;
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "MovieBase: Search Results",
+  };
+}
+
 export default async function Search({ searchParams }: Props) {
   const session = await getSessionOnServer();
   if (!session) {
@@ -54,6 +61,7 @@ export default async function Search({ searchParams }: Props) {
   const movieMap = new Map<number, FetchedMovie>();
   movies.results.forEach((movie) => movieMap.set(movie.id, movie as FetchedMovie));
   if (user) {
+    const { _id, ...simplifiedUser } = user;
     const pagination: JSX.Element | undefined = (() => {
       if (confirmedParams) {
         if (confirmedParams.page <= 0) {
@@ -100,8 +108,8 @@ export default async function Search({ searchParams }: Props) {
         //Search Params are Valid
         <>
           <SearchBar lastSearch={confirmedParams.query} />
-          <section className="mt-4 px-2 flex flex-row justify-between items-center">
-            <h1 className="text-2xl w-fit">
+          <section className="mt-4 px-2">
+            <h1 className="text-2xl w-full">
               Search Results for <span className="font-bold">{confirmedParams.query}</span>
             </h1>
             <div className="flex flex-col text-xs justify-end">
@@ -115,7 +123,7 @@ export default async function Search({ searchParams }: Props) {
             </div>
           </section>
           <section className="flex flex-col sm:gap-2 mt-4 sm:mb-4">
-            <UserContext user={user} movieMap={movieMap}>
+            <UserContext user={simplifiedUser} movieMap={movieMap}>
               {movies.results.length > 0 ? (
                 movies.results.map((movie) => <Result movie={movie} key={movie.id} />)
               ) : (

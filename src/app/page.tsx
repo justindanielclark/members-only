@@ -3,6 +3,13 @@ import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 import { redirect } from "next/navigation";
 import PosterSlider from "./components/PosterSlider";
 import MainContainer from "@/lib/sharedComponents/MainContainer";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "MovieBase",
+  };
+}
 
 export default async function Home() {
   let session,
@@ -53,12 +60,14 @@ export default async function Home() {
       </section>
       <section className="w-full lg:w-1/3 order-5 relative">
         <div className="w-full h-fit lg:absolute lg:top-1/2 lg:-translate-y-1/2 p-2">
-          <h1 className="font-bold text-3xl bg-slate-200 text-black p-2 mb-8">Lorem Ipsum</h1>
           <div className="text-xl px-8 lg:p-0">
-            <p className="font-bold">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis facere eius dolorum cum, distinctio unde
-              mollitia, hic corporis autem quasi voluptate, dolore asperiores totam? Quasi enim nihil eos est totam!
-            </p>
+            <p className="font-bold">Find whatever it is you are looking for:</p>
+            <p>Our database</p>
+            <ul className="list-disc pl-6">
+              <li>has over a million movies on record,</li>
+              <li>has complete cast and crew credits,</li>
+              <li>is quickly searched and indexed</li>
+            </ul>
           </div>
         </div>
       </section>
