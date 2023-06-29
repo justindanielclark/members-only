@@ -20,7 +20,6 @@ export async function PUT(req: NextRequest, res: NextResponse) {
           message: "Success",
           data: undefined,
         };
-        console.log("Successfully Added Movie To Watchlist");
         return NextResponse.json(API_Res, { status: 200 });
       } else if (data.type == "Remove") {
         //Filter out Movie if it does exist in Watchlist
@@ -30,18 +29,29 @@ export async function PUT(req: NextRequest, res: NextResponse) {
           message: "Success",
           data: undefined,
         };
-        console.log("Successfully Removed Movie From Watchlist");
         return NextResponse.json(API_Res, { status: 200 });
       } else {
         throw new Error("Unsupported Request Type In PUT Request Body");
       }
     }
     throw Error("Unable to Find User");
-  } catch {
+  } catch (error) {
+    let message: string;
+    if (error instanceof Error) message = error.message;
+    let Response_Init: ResponseInit;
+    if ((message = "Unsupported Request Type in PUT Request Body")) {
+      Response_Init = {
+        status: 400,
+      };
+    } else {
+      Response_Init = {
+        status: 500,
+      };
+    }
     const API_Res: API_Response<undefined> = {
       message: "Failure",
       data: undefined,
     };
-    return NextResponse.json(API_Res, { status: 500 });
+    return NextResponse.json(API_Res, Response_Init);
   }
 }
