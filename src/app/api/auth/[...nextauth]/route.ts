@@ -23,7 +23,8 @@ export const authOptions: AuthOptions = {
         const u = await _mongo.user.retrieveUser(user.email, account.provider);
         if (u == null) {
           const name = user.name === null || user.name === undefined ? "" : user.name;
-          await _mongo.user.createUser(user.email, account.provider, name);
+          const image = user.image === null || user.image === undefined ? "" : user.image;
+          await _mongo.user.createUser(user.email, account.provider, name, image);
           // console.log("User Created");
         }
         // else {
