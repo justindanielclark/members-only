@@ -15,8 +15,6 @@ module.exports = {
         movieMenuCardDown: "movieCardDown 3s linear",
         headerMenuUp: "headerMenuUp .15s linear",
         headerMenuDown: "headerMenuDown .15s linear",
-        toastAppear: "toastAppear .5s linear",
-        toastDisappear: "toastDisappear .5s linear",
       },
       keyframes: {
         movieMenuCardUp: {
@@ -37,21 +35,17 @@ module.exports = {
         },
         headerMenuDown: {
           "0%": {
-            bottom: "0",
             transform: "translateY(0%)",
           },
           "100%": {
-            bottom: "-.125rem",
             transform: "translateY(100%)",
           },
         },
         headerMenuUp: {
           "0%": {
-            bottom: "-.125rem",
             transform: "translateY(100%)",
           },
           "100%": {
-            bottom: "0",
             transform: "translateY(0%)",
           },
         },
@@ -71,38 +65,30 @@ module.exports = {
             transform: "translateX(193px)",
           },
         },
-        toastAppear: {
-          "0%": {
-            opacity: 0,
-          },
-          "100%": {
-            opacity: 1,
-          },
-        },
-        toastDisappear: {
-          "0%": {
-            opacity: 1,
-          },
-          "100%": {
-            opacity: 0,
-          },
-        },
       },
       width: {
         poster: "185px",
         smPoster: "93px",
+        profile: "185px",
+        smProfile: "45px",
       },
       maxWidth: {
         poster: "185px",
         smPoster: "93px",
+        profile: "185px",
+        smProfile: "45px",
       },
       height: {
         poster: "278px",
         smPoster: "139px",
+        profile: "278px",
+        smProfile: "68px",
       },
       maxHeight: {
         poster: "278px",
         smPoster: "139px",
+        profile: "278px",
+        smProfile: "68px",
       },
     },
   },
