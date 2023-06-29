@@ -102,16 +102,16 @@ function HeaderMenu({ state, setState }: HeaderMenuProps) {
   const classes: Array<string> = (() => {
     switch (state) {
       case "open": {
-        return ["-bottom-0.5", "translate-y-full"];
+        return ["translate-y-full"];
       }
       case "opening": {
-        return ["bottom-0", "translate-y-0", "animate-headerMenuDown"];
+        return ["translate-y-0", "animate-headerMenuDown"];
       }
       case "closed": {
-        return ["bottom-0", "translate-y-0"];
+        return ["translate-y-0"];
       }
       case "closing": {
-        return ["-bottom-0.5", "translate-y-full", "animate-headerMenuUp"];
+        return ["translate-y-full", "animate-headerMenuUp"];
       }
       default: {
         throw new Error("Unexpected Animation State");
@@ -120,7 +120,7 @@ function HeaderMenu({ state, setState }: HeaderMenuProps) {
   })();
   return (
     <div
-      className={`absolute right-5 bg-slate-900 rounded-b-lg ${classes.join(" ")}`}
+      className={`bottom-0 absolute right-5 bg-slate-900 rounded-b-lg ${classes.join(" ")}`}
       style={{ animationFillMode: "forwards" }}
       onAnimationEnd={(e) => {
         if (e.animationName === "headerMenuDown") {
@@ -130,7 +130,7 @@ function HeaderMenu({ state, setState }: HeaderMenuProps) {
         }
       }}
     >
-      <ul className="flex flex-col min-w-56">
+      <ul className="flex flex-col min-w-56 pt-4">
         <li className="text-right whitespace-nowrap p-2 cursor-pointer hover:bg-slate-700/80">
           <Link href={"/profile"} className="w-full flex flex-row items-center gap-4 justify-end">
             <span>Profile / Settings</span>

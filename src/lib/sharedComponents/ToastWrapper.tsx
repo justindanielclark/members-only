@@ -14,7 +14,7 @@ export default function ToastWrapper() {
       pauseOnFocusLoss
       draggable
       pauseOnHover
-      theme="light"
+      theme="dark"
     />
   );
 }

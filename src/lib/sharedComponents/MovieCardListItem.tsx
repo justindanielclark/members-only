@@ -13,6 +13,7 @@ import removeMovieFromWatchlist from "../api/removeMovieFromWatchlist";
 import addMovieToSeenList from "../api/addMovieToSeenList";
 import removeMovieFromSeenlist from "../api/removeMovieFromSeenList";
 import { toast } from "react-toastify";
+import CopiedToastId from "./Toasts/CopiedToast";
 
 type MovieCardProps = {
   movie: FetchedMovie;
@@ -23,12 +24,111 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
   const router = useRouter();
   const UserContext = useUserContext();
   const MenuContext = useMenuMovieContext();
-
+  const [isProcessingWatchlistRequest, setProcessingWatchlistRequest] = useState<boolean>(false);
+  const [isProcessingSeenRequest, setProcessingSeenRequest] = useState<boolean>(false);
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false);
   const isOnWatchList =
     getUserListByName(UserContext.user, "Watch List").movies.findIndex((item) => item == movie.id) !== -1;
   const isOnSeenList =
     getUserListByName(UserContext.user, "Watched").movies.findIndex((item) => item == movie.id) !== -1;
+
+  const handleClickSeenList = () => {
+    if (!isProcessingSeenRequest) {
+      setProcessingSeenRequest(true);
+      if (isOnSeenList) {
+        const removalPromise = removeMovieFromSeenlist({
+          movieID: movie.id,
+          lookup: UserContext.user.lookup,
+        })
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+            throw new Error("Error removing movie from seenlist");
+          })
+          .then((data) => {
+            setProcessingSeenRequest(false);
+            UserContext.removeSeenListMovie(movie.id);
+            router.refresh();
+          })
+          .catch((err) => console.log(err.message));
+        toast.promise(removalPromise, {
+          pending: `Removing ${movie.title} from Seen List`,
+          success: `${movie.title} removed from Seen List`,
+          error: "There was an error with removing the movie",
+        });
+      } else {
+        const addPromise = addMovieToSeenList({ movieID: movie.id, lookup: UserContext.user.lookup })
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+            throw new Error("Error adding movie to seenlist");
+          })
+          .then((data) => {
+            setProcessingSeenRequest(false);
+            UserContext.addSeenListMovie(movie.id);
+            router.refresh();
+          })
+          .catch((err) => console.log(err.message));
+        toast.promise(addPromise, {
+          pending: `Adding ${movie.title} to Seen List`,
+          success: `${movie.title} added to Seen List`,
+          error: "There was an error with removing the movie",
+        });
+      }
+    }
+  };
+  const handleClickWatchList = () => {
+    if (!isProcessingWatchlistRequest) {
+      setProcessingWatchlistRequest(true);
+      if (isOnWatchList) {
+        const removalPromise = removeMovieFromWatchlist({ movieID: movie.id, lookup: UserContext.user.lookup })
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+            throw new Error("Error removing movie from watchlist");
+          })
+          .then((data) => {
+            if (MenuContext.setSelectedID && MenuContext.selectedID === movie.id) {
+              MenuContext.setSelectedID(undefined);
+            }
+            setProcessingWatchlistRequest(false);
+            UserContext.removeWatchListMovie(movie.id);
+            router.refresh();
+          })
+          .catch((err) => console.log(err.message));
+        toast.promise(removalPromise, {
+          pending: `Removing ${movie.title} from Watch List`,
+          success: `${movie.title} removed from Watch List`,
+          error: "There was an error with removing the movie",
+        });
+      } else {
+        const addPromise = addMovieToWatchlist({ movieID: movie.id, lookup: UserContext.user.lookup })
+          .then((res) => {
+            if (res.ok) {
+              return res.json();
+            }
+            throw new Error("Error adding movie to watchlist");
+          })
+          .then((data) => {
+            if (MenuContext.setSelectedID && MenuContext.selectedID === movie.id) {
+              MenuContext.setSelectedID(undefined);
+            }
+            setProcessingWatchlistRequest(false);
+            UserContext.addWatchListMovie(movie.id);
+            router.refresh();
+          })
+          .catch((err) => console.log(err.message));
+        toast.promise(addPromise, {
+          pending: `Adding ${movie.title} to Watch List`,
+          success: `${movie.title} added to Watch List`,
+          error: "There was an error with adding the movie",
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     if (MenuContext.selectedID === movie.id) {
@@ -79,80 +179,12 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                 </li>
               </Link>
               <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                <button
-                  className="w-full h-fit text-left p-2"
-                  onClick={() => {
-                    if (isOnWatchList) {
-                      removeMovieFromWatchlist({ movieID: movie.id, lookup: UserContext.user.lookup })
-                        .then((res) => {
-                          if (res.ok) {
-                            return res.json();
-                          }
-                          throw new Error("Error removing movie from watchlist");
-                        })
-                        .then((data) => {
-                          if (MenuContext.setSelectedID && MenuContext.selectedID === movie.id) {
-                            MenuContext.setSelectedID(undefined);
-                          }
-                          UserContext.removeWatchListMovie(movie.id);
-                          router.refresh();
-                        })
-                        .catch((err) => console.log(err.message));
-                    } else {
-                      addMovieToWatchlist({ movieID: movie.id, lookup: UserContext.user.lookup })
-                        .then((res) => {
-                          if (res.ok) {
-                            return res.json();
-                          }
-                          throw new Error("Error adding movie to watchlist");
-                        })
-                        .then((data) => {
-                          if (MenuContext.setSelectedID && MenuContext.selectedID === movie.id) {
-                            MenuContext.setSelectedID(undefined);
-                          }
-                          UserContext.addWatchListMovie(movie.id);
-                          router.refresh();
-                        })
-                        .catch((err) => console.log(err.message));
-                    }
-                  }}
-                >
+                <button className="w-full h-fit text-left p-2" onClick={handleClickWatchList}>
                   {isOnWatchList ? "Remove From Watchlist" : "Add To Watchlist"}
                 </button>
               </li>
               <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 w-full cursor-pointer">
-                <button
-                  className="w-full h-fit text-left p-2"
-                  onClick={() => {
-                    if (isOnSeenList) {
-                      removeMovieFromSeenlist({ movieID: movie.id, lookup: UserContext.user.lookup })
-                        .then((res) => {
-                          if (res.ok) {
-                            return res.json();
-                          }
-                          throw new Error("Error removing movie from seenlist");
-                        })
-                        .then((data) => {
-                          UserContext.removeSeenListMovie(movie.id);
-                          router.refresh();
-                        })
-                        .catch((err) => console.log(err.message));
-                    } else {
-                      addMovieToSeenList({ movieID: movie.id, lookup: UserContext.user.lookup })
-                        .then((res) => {
-                          if (res.ok) {
-                            return res.json();
-                          }
-                          throw new Error("Error adding movie to seenlist");
-                        })
-                        .then((data) => {
-                          UserContext.addSeenListMovie(movie.id);
-                          router.refresh();
-                        })
-                        .catch((err) => console.log(err.message));
-                    }
-                  }}
-                >
+                <button className="w-full h-fit text-left p-2" onClick={handleClickSeenList}>
                   {isOnSeenList ? "Unmark as Seen" : "Mark as Seen"}
                 </button>
               </li>
@@ -162,7 +194,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
                   role="navigation"
                   onClick={() => {
                     navigator.clipboard.writeText(`${window.location.host}/movie/${movie.id}`);
-                    toast("Copied");
+                    toast(`Copied Link To ${movie.title}`, CopiedToastId);
                   }}
                 >
                   Copy Link To Page

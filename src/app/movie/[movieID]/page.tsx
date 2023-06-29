@@ -170,23 +170,24 @@ export default async function MoviePage({ params: { movieID } }: Props) {
           </SubMainContainer>
         </div>
       );
-      const CastContent: JSX.Element = (
+      const CastCrewAndRecommendationContent: JSX.Element = (
         <>
           {cast.length > 0 || reducedCrew.length > 0 ? (
-            <SubMainContainer>
+            <SubMainContainer className="px-4 py-8 bg-slate-700/20 gap-6 flex flex-col">
+              <section>
+                <Link
+                  href={`/movie/${movie.id}/castandcrew`}
+                  className="flex flex-row gap-1 items-center justify-end text-sm hover:underline"
+                >
+                  <LinkIcon />
+                  <span>View Full Cast and Crew</span>
+                </Link>
+              </section>
               {cast.length > 0 ? (
-                <section className="my-4">
-                  <h2 className="text-2xl font-bold px-2">Top Billed Cast</h2>
-                  <div className="w-full h-fit relative px-5">
-                    <div
-                      id="opacityScreenLeft"
-                      className="absolute h-full w-4 top-0 left-4 bg-gradient-to-r from-slate-800 to-slate-800/5 z-10"
-                    ></div>
-                    <div
-                      id="opacityScreenRight"
-                      className="absolute h-full w-4 top-0 right-4 bg-gradient-to-l from-slate-800 to-slate-800/5 z-10"
-                    ></div>
-                    <div className="flex flex-row overflow-y-hidden gap-4 px-5 relative">
+                <section className="">
+                  <h2 className="text-2xl font-bold underline">Top Billed Cast:</h2>
+                  <div className="w-full h-fit px-5">
+                    <div className="flex flex-row overflow-y-hidden gap-4">
                       {cast.slice(0, 10).map((credit) => {
                         return <CastCreditCard credit={credit} key={credit.id} />;
                       })}
@@ -195,18 +196,10 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                 </section>
               ) : undefined}
               {reducedCrew.length > 0 ? (
-                <section className="my-4">
-                  <h2 className="text-2xl font-bold mt-4 px-2">Notable Crew</h2>
-                  <div className="w-full h-fit relative px-5">
-                    <div
-                      id="opacityScreenLeft"
-                      className="absolute h-full w-4 top-0 left-4 bg-gradient-to-r from-slate-800 to-slate-800/5 z-10"
-                    ></div>
-                    <div
-                      id="opacityScreenRight"
-                      className="absolute h-full w-4 top-0 right-4 bg-gradient-to-l from-slate-800 to-slate-800/5 z-10"
-                    ></div>
-                    <div className="flex flex-row overflow-y-hidden gap-4 px-5 relative justify-start items-stretch">
+                <section className="">
+                  <h2 className="text-2xl font-bold underline">Notable Crew</h2>
+                  <div className="w-full h-fit px-5">
+                    <div className="flex flex-row overflow-y-hidden gap-4 justify-start items-stretch">
                       {reducedCrew.slice(0, reducedCrew.length >= 10 ? 10 : reducedCrew.length).map((credit) => {
                         return <CastCreditCard credit={credit} key={credit.id} />;
                       })}
@@ -214,40 +207,24 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                   </div>
                 </section>
               ) : undefined}
+              {fetchedRecommendations.length > 0 ? (
+                <section>
+                  <h2 className="text-2xl font-bold underline">Recommended Movies:</h2>
+                  <div className="w-full h-fit px-5">
+                    <Recommendations movies={fetchedRecommendations} />
+                  </div>
+                </section>
+              ) : undefined}
             </SubMainContainer>
           ) : undefined}
         </>
       );
-      const RecommendationContent: JSX.Element | undefined = (() => {
-        if (fetchedRecommendations.length > 0) {
-          return (
-            <SubMainContainer>
-              <section>
-                <h2 className="text-2xl font-bold mt-4 px-2">Recommended Movies:</h2>
-                <div className="w-full h-fit relative px-5">
-                  <div
-                    id="opacityScreenLeft"
-                    className="absolute h-full w-4 top-0 left-4 bg-gradient-to-r from-slate-800 to-slate-800/5 z-10"
-                  ></div>
-                  <div
-                    id="opacityScreenRight"
-                    className="absolute h-full w-4 top-0 right-4 bg-gradient-to-l from-slate-800 to-slate-800/5 z-10"
-                  ></div>
 
-                  <Recommendations movies={fetchedRecommendations} />
-                </div>
-              </section>
-            </SubMainContainer>
-          );
-        }
-        return undefined;
-      })();
       return (
         <main className={mainContainerDefaultClasses}>
           <UserContext movieMap={movieMap} user={simplifiedUser}>
             {MovieContent}
-            {CastContent}
-            {RecommendationContent}
+            {CastCrewAndRecommendationContent}
           </UserContext>
         </main>
       );

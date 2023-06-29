@@ -1,5 +1,3 @@
-import ToastWrapper from "./ToastWrapper";
-
 type Props = {
   children: React.ReactNode;
   className?: string;
@@ -16,7 +14,6 @@ export default function MainContainer({ children, className }: Props) {
   return (
     <main className={mainContainerDefaultClasses}>
       <div className={"max-w-3xl lg:max-w-6xl mx-auto" + " " + containerClasses.join(" ")}>{children}</div>
-      <ToastWrapper />
     </main>
   );
 }

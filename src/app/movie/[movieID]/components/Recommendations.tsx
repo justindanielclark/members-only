@@ -10,7 +10,7 @@ type Props = {
 export default function Recommendations({ movies }: Props) {
   const [selectedID, setSelectedID] = useState<undefined | number>(undefined);
   return (
-    <ul className="flex flex-row overflow-x-scroll flex-nowrap justify-start gap-4 px-5 mb-8">
+    <ul className="flex flex-row overflow-x-scroll flex-nowrap justify-start gap-4">
       {movies.map((movie, idx) => (
         <MenuMovieContext.Provider
           value={{

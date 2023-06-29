@@ -31,7 +31,7 @@ export default function ImageWithFallback({ src, alt, crossOrigin, width, height
     />
   ) : (
     <div className={className + " flex flex-row items-center justify-center bg-slate-900/30"}>
-      <IconContext.Provider value={{ color: "yellow", className: "h-10 w-10" }}>
+      <IconContext.Provider value={{ color: "white", className: "h-6 w-6" }}>
         <BiUnlink />
       </IconContext.Provider>
     </div>
