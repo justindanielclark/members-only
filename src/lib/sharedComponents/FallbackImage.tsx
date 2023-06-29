@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { BiUnlink } from "react-icons/bi";
-import { IconContext } from "react-icons";
+import LinkIcon from "./Icons/LinkIcon";
+import Link from "next/link";
 
 type Props = {
   src: string;
@@ -31,9 +31,7 @@ export default function ImageWithFallback({ src, alt, crossOrigin, width, height
     />
   ) : (
     <div className={className + " flex flex-row items-center justify-center bg-slate-900/30"}>
-      <IconContext.Provider value={{ color: "white", className: "h-6 w-6" }}>
-        <BiUnlink />
-      </IconContext.Provider>
+      <LinkIcon />
     </div>
   );
   return content;
