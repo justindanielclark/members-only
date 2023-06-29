@@ -25,7 +25,7 @@ async function Dashboard() {
       content = (
         <MainContainer>
           <div className="max-w-xl mx-auto p-4">
-            <h1 className="text-3xl font-bold mt-4 underline underline-offset-4">User Profile / Settings</h1>
+            <h1 className="text-2xl font-bold my-8">User Profile / Settings</h1>
             <ProfileForm
               user={simplifiedUser}
               provider={session.user.provider as string}

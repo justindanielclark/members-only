@@ -74,7 +74,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
             backgroundSize: "cover",
             backgroundPosition: "50% 20%",
           }}
-          className=" w-full"
+          className="max-w-[2000px] mx-auto"
         >
           <SubMainContainer className="py-10 flex flex-col md:grid md:grid-cols-[185px_1fr] md:grid-rows-[auto_auto_auto]">
             {/* Title, Rating, Runtime */}
@@ -106,6 +106,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                 width={preferredPosterSize.width}
                 priority={true}
                 crossOrigin=""
+                className="w-poster max-w-poster h-poster max-h-poster border-white border-2"
               />
             </section>
             {/* Tagline, Overview, Details, WebLink, Status, Lang, Budget, Revenue */}
@@ -185,7 +186,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
               </section>
               {cast.length > 0 ? (
                 <section className="">
-                  <h2 className="text-2xl font-bold underline">Top Billed Cast:</h2>
+                  <h2 className="text-2xl font-bold">Top Billed Cast:</h2>
                   <div className="w-full h-fit px-5">
                     <div className="flex flex-row overflow-y-hidden gap-4">
                       {cast.slice(0, 10).map((credit) => {
@@ -197,7 +198,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
               ) : undefined}
               {reducedCrew.length > 0 ? (
                 <section className="">
-                  <h2 className="text-2xl font-bold underline">Notable Crew</h2>
+                  <h2 className="text-2xl font-bold">Notable Crew:</h2>
                   <div className="w-full h-fit px-5">
                     <div className="flex flex-row overflow-y-hidden gap-4 justify-start items-stretch">
                       {reducedCrew.slice(0, reducedCrew.length >= 10 ? 10 : reducedCrew.length).map((credit) => {
@@ -209,7 +210,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
               ) : undefined}
               {fetchedRecommendations.length > 0 ? (
                 <section>
-                  <h2 className="text-2xl font-bold underline">Recommended Movies:</h2>
+                  <h2 className="text-2xl font-bold">Recommended Movies:</h2>
                   <div className="w-full h-fit px-5">
                     <Recommendations movies={fetchedRecommendations} />
                   </div>

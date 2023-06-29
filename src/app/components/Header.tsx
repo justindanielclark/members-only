@@ -82,7 +82,9 @@ function Header() {
     <header className="bg-slate-900 border-b border-slate-600 relative">
       <div className="max-w-7xl mx-auto bg-slate-900 z-50 relative">
         <div className="relative w-full flex flex-row bg-slate-900 justify-between h-12 items-center z-50 px-4">
-          <Link href={session ? "/dashboard" : "/"}>MovieBase</Link>
+          <Link className="font-bold text-lg hover:underline" href={session ? "/dashboard" : "/"}>
+            MovieBase
+          </Link>
           {content}
         </div>
         {menuAnimationState !== "closed" && status == "authenticated" ? (
