@@ -4,6 +4,8 @@ type User = {
   //Combination of email[provider] ~ Example: jclark@gmail.com[github]
   lookup: string;
   handle: string;
+  aboutMe: string;
+  photoPath: string;
   lists: Array<List>;
   friends: Array<Friend>;
 };

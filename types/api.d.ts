@@ -24,3 +24,9 @@ type WatchlistAddMovieRequest = WatchListMethod<"Add"> & WatchListRequest;
 type WatchListRemoveMovieRequest = WatchListMethod<"Remove"> & WatchListRequest;
 type SeenlistAddMovieRequest = SeenListMethod<"Add"> & SeenListRequest;
 type SeenListRemoveMovieRequest = SeenListMethod<"Remove"> & SeenListRequest;
+
+type UpdateUserRequest = {
+  lookup: string;
+  handle: string;
+  aboutMe: string;
+};
