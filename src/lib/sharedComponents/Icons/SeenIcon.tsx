@@ -1,6 +1,6 @@
 "use client";
-import { IconContext } from "react-icons";
-import { AiFillEye } from "react-icons/ai";
+import { IconContext } from "@react-icons/all-files";
+import { AiFillEye } from "@react-icons/all-files/ai/AiFillEye";
 export default function SeenIcon() {
   return (
     <IconContext.Provider value={{ className: "w-6 h-6 inline" }}>

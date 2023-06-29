@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useMenuMovieContext } from "./MenuMovieContext";
-import { FaEllipsisV as VerticalEllipsisIcon } from "react-icons/fa";
 import { preferredPosterSize } from "@/lib/utils/preferredPosterSize";
 import Link from "next/link";
 import ImageWithFallback from "./FallbackImage";
@@ -14,6 +13,7 @@ import addMovieToSeenList from "../api/addMovieToSeenList";
 import removeMovieFromSeenlist from "../api/removeMovieFromSeenList";
 import { toast } from "react-toastify";
 import CopiedToastId from "./Toasts/CopiedToast";
+import VertEllipsisIcon from "./Icons/VertEllipsisIcon";
 
 type MovieCardProps = {
   movie: FetchedMovie;
@@ -150,7 +150,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
           className="h-poster"
         />
         <div
-          className="absolute top-2 right-2 p-2 bg-black rounded-full cursor-pointer z-20"
+          className="absolute top-2 right-2 w-8 h-8 bg-black rounded-full cursor-pointer z-20 flex justify-center items-center"
           onClick={() => {
             if (MenuContext.setSelectedID && MenuContext.selectedID !== movie.id) {
               MenuContext.setSelectedID(movie.id);
@@ -159,7 +159,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
             }
           }}
         >
-          <VerticalEllipsisIcon />
+          <VertEllipsisIcon />
         </div>
         <div
           className={`w-full h-full bg-black z-10 absolute left-0 pt-10 duration-200 transition-all ${
