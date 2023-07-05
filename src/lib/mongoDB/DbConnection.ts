@@ -17,7 +17,7 @@ const DbConnection = function () {
       process.on("SIGHUP", () => gracefulShutdown());
       return _db;
     } catch {
-      throw new Error('Unable to connect to MongoDb URL in DbConnection.ts')
+      throw new Error("Unable to connect to MongoDb URL in DbConnection.ts");
     }
   }
   async function get(): Promise<MongoClient> {
@@ -28,7 +28,7 @@ const DbConnection = function () {
       db = await DbConnect();
       return db;
     } catch {
-      throw new Error('Unable to connect to MongoDb URL in DbConnection.ts')
+      throw new Error("Unable to connect to MongoDb URL in DbConnection.ts");
     }
   }
   return {

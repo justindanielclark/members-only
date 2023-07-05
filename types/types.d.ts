@@ -36,3 +36,8 @@ type Toast = {
   message: string;
   submissionTime: Date;
 };
+
+type SearchParameters = {
+  page: number;
+  query: string;
+};
