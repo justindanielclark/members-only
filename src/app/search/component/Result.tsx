@@ -9,7 +9,7 @@ export default function Result({ movie }: Props) {
   return (
     <article className="group/section sm:rounded-lg overflow-hidden border-slate-900 border-2 sm:shadow-md sm:shadow-slate-900">
       {/* TITLE */}
-      <h2 className="text-xl flex items-center min-h-12 p-2 font-bold">
+      <h2 className="text-xl flex items-center min-h-12 p-2 font-bold bg-slate-900">
         {`${movie.title}${movie.release_date !== "" ? ` (${new Date(movie.release_date).getFullYear()})` : ""}`}
       </h2>
       {/* POSTER AND OVERVIEW */}
@@ -25,7 +25,7 @@ export default function Result({ movie }: Props) {
             className="h-smPoster w-smPoster max-h-smPoster max-w-smPoster"
           />
         </div>
-        <div className="max-h-smPoster h-smPoster flex flex-col w-full">
+        <div className="max-h-smPoster h-smPoster flex flex-col w-full bg-slate-700/70">
           <p className="overflow-x-hidden flex-1 text-sm p-2 italic">{movie.overview}</p>
         </div>
       </div>

@@ -26,7 +26,7 @@ export default async function Home() {
     });
   }
   const content = (
-    <MainContainer className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center items-stretch bg-slate-900/40 p-4">
+    <MainContainer className="flex flex-col lg:flex-row lg:flex-wrap lg:items-center items-stretch bg-slate-900/40">
       <section className="w-full lg:w-1/3 order-1">
         <h1 className="font-bold text-6xl bg-slate-200 text-black p-2 mb-8">MovieBase</h1>
         <div className="text-xl px-8 lg:p-0">
@@ -61,7 +61,7 @@ export default async function Home() {
       <section className="w-full lg:w-1/3 order-5 relative">
         <div className="w-full h-fit lg:absolute lg:top-1/2 lg:-translate-y-1/2 p-2">
           <div className="text-xl px-8 lg:p-0">
-            <p className="font-bold">Find whatever it is you are looking for:</p>
+            <p className="font-bold">Whatever it is you are looking for:</p>
             <p>Our database</p>
             <ul className="list-disc pl-6">
               <li>has over a million movies on record,</li>

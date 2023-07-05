@@ -6,6 +6,7 @@ import { preferredProfileSize } from "@/lib/utils/preferredProfileSize";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import LinkIcon from "@/lib/sharedComponents/Icons/LinkIcon";
+import Accordian from "@/lib/sharedComponents/Containers/Accordian";
 
 type Props = {
   params: {
@@ -103,8 +104,8 @@ export default async function CastPage({ params: { personID } }: Props) {
               <div>
                 <h2 className="font-bold">Also Known As:</h2>
                 <ul>
-                  {details.also_known_as.map((alias, idx) => (
-                    <li className="text-sm px-2" key={idx}>
+                  {details.also_known_as.map((alias) => (
+                    <li className="text-sm px-2" key={alias}>
                       {alias}
                     </li>
                   ))}
@@ -114,22 +115,20 @@ export default async function CastPage({ params: { personID } }: Props) {
           </div>
         </section>
         {details.biography !== null && details.biography !== "" ? (
-          <section className="my-4">
-            <h2 className="text-2xl my-2 font-bold px-2">Overview:</h2>
-            <div>
+          <Accordian title="Overview:">
+            <div className="py-2">
               {details.biography.split("\n").map((chunk, idx) => (
                 <p className="text-sm indent-4 px-2 py-0.5" key={idx}>
                   {chunk}
                 </p>
               ))}
             </div>
-          </section>
+          </Accordian>
         ) : undefined}
         {/* CAST CREDITS */}
         {credits.cast.length > 0 ? (
-          <section className="my-4 p-2 rounded-lg">
-            <h2 className="text-2xl my-2 font-bold">As Cast:</h2>
-            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden mx-10 py-2 bg-slate-400/10">
+          <Accordian title="As Cast:">
+            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden py-2">
               {credits.cast
                 .map((credit) => {
                   return { ...credit, release_date: credit.release_date !== "" ? new Date(credit.release_date) : null };
@@ -147,7 +146,7 @@ export default async function CastPage({ params: { personID } }: Props) {
                 .map((credit) => {
                   return (
                     <li
-                      key={credit.id}
+                      key={`${credit.id}-${credit.character}`}
                       className="mx-2 p-2 even:bg-stone-900/10 even:hover:bg-stone-900/30 odd:bg-slate-900/20 odd:hover:bg-slate-900/40 rounded-lg shadow-sm shadow-black flex flex-row flex-wrap items-end"
                     >
                       <div className="flex flex-col flex-1">
@@ -168,13 +167,12 @@ export default async function CastPage({ params: { personID } }: Props) {
                   );
                 })}
             </ul>
-          </section>
+          </Accordian>
         ) : undefined}
         {/* CREW CREDITS */}
         {credits.crew.length > 0 ? (
-          <section className="my-4 p-2 rounded-lg">
-            <h2 className="text-2xl my-2 font-bold">As Crew:</h2>
-            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden mx-10 py-2 bg-slate-400/10">
+          <Accordian title="As Crew:">
+            <ul className="flex flex-col gap-1 max-h-96 overflow-x-hidden py-2">
               {credits.crew
                 .map((credit) => {
                   return { ...credit, release_date: credit.release_date !== "" ? new Date(credit.release_date) : null };
@@ -192,7 +190,7 @@ export default async function CastPage({ params: { personID } }: Props) {
                 .map((credit) => {
                   return (
                     <li
-                      key={credit.id}
+                      key={`${credit.id}-${credit.job}`}
                       className="mx-2 p-2 even:bg-stone-900/10 even:hover:bg-stone-900/30 odd:bg-slate-900/20 odd:hover:bg-slate-900/40 rounded-lg shadow-sm shadow-black flex flex-row flex-wrap items-end"
                     >
                       <div className="flex flex-col flex-1">
@@ -213,7 +211,7 @@ export default async function CastPage({ params: { personID } }: Props) {
                   );
                 })}
             </ul>
-          </section>
+          </Accordian>
         ) : undefined}
       </>
     );

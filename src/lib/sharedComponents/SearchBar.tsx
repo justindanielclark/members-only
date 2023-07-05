@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import SectionContainer from "./Containers/SectionContainer";
 
 type Props = {
   lastSearch: string;
@@ -10,7 +11,7 @@ export default function SearchBar({ lastSearch }: Props) {
   const [searchTerm, setSearchTerm] = useState(lastSearch);
   const router = useRouter();
   return (
-    <section className="" id="searchBar">
+    <SectionContainer id="searchBar">
       <form role="navigation" className="w-full p-4">
         <h1 className="text-2xl text-center">
           Millions of movies to discover. <span className="font-bold block sm:inline">Explore now.</span>
@@ -51,6 +52,6 @@ export default function SearchBar({ lastSearch }: Props) {
           </button>
         </div>
       </form>
-    </section>
+    </SectionContainer>
   );
 }

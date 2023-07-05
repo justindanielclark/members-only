@@ -3,7 +3,6 @@ import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import MainContainer from "@/lib/sharedComponents/MainContainer";
 import SearchBar from "@/lib/sharedComponents/SearchBar";
-import TopMovies from "./components/TopMovies";
 import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 import _mongo from "@/lib/mongoDB/_mongo";
 import UserMovieList from "./components/UserMovieLists";
@@ -11,6 +10,8 @@ import UserContext from "@/lib/providers/UserProvider";
 import getAllMovies from "@/lib/TMDB/getAllMovies";
 import { getUserListByName } from "@/lib/utils/getUserListByName";
 import { Metadata } from "next";
+import MovieCardSlider from "@/lib/sharedComponents/Containers/MovieCardSlider";
+import { Session } from "next-auth";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -19,7 +20,8 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 async function Dashboard() {
-  let session, content;
+  let session: Session | null;
+  let content: React.ReactNode;
   session = await getServerSession(authOptions);
 
   if (session === null) {
@@ -51,7 +53,8 @@ async function Dashboard() {
         <MainContainer>
           <SearchBar lastSearch="" />
           <UserContext user={simplifiedUser} movieMap={movieMap}>
-            <TopMovies
+            <MovieCardSlider
+              title="Today's Top Movies:"
               movies={movies.reduce((acc, cur) => {
                 acc.push(cur.id);
                 return acc;
@@ -63,7 +66,7 @@ async function Dashboard() {
                 "Your Watchlist",
                 "This is currently empty. You'll need to add movies to your watchlist to fill this out."
               )}
-              listTitle="Your Watchlist"
+              listTitle="Your Watchlist:"
             />
           </UserContext>
         </MainContainer>
