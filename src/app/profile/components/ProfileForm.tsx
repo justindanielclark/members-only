@@ -9,11 +9,12 @@ import { useRouter } from "next/navigation";
 
 type Props = {
   user: User;
+  userID: string;
   provider: string;
   imgsrc: string;
 };
 
-export default function ProfileForm({ user, provider, imgsrc }: Props) {
+export default function ProfileForm({ user, provider, imgsrc, userID }: Props) {
   const [originalHandle, setOriginalHandle] = useState<string>(user.handle);
   const [originalAboutMe, setOriginalAboutMe] = useState<string>(user.aboutMe);
   const [changesMade, setChangesMade] = useState<boolean>(false);
@@ -72,6 +73,15 @@ export default function ProfileForm({ user, provider, imgsrc }: Props) {
   return (
     <form action="/api/profile" method="PUT" className="my-4">
       <div className="bg-slate-700/20 px-6 py-4 rounded-lg flex flex-col gap-4">
+        <div className="flex flex-col">
+          <div className="flex flex-col sm:flex-row sm:items-end flex-wrap">
+            <h2 className="font-bold text-xl">Your Profile ID:</h2>
+            <p className="text-xs flex-1 text-right sm:whitespace-nowrap">
+              Generated On Account Creation, share with friends
+            </p>
+          </div>
+          <p>{userID}</p>
+        </div>
         <div className="flex flex-col">
           <div className="flex flex-col sm:flex-row sm:items-end flex-wrap">
             <h2 className="font-bold text-xl">Your Profile Photo:</h2>
