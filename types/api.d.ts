@@ -30,3 +30,7 @@ type UpdateUserRequest = {
   handle: string;
   aboutMe: string;
 };
+
+type FriendRequestRequest = {
+  userID: string;
+};

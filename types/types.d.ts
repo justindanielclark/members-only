@@ -41,3 +41,9 @@ type SearchParameters = {
   page: number;
   query: string;
 };
+
+type FriendRequest = {
+  sent: Date;
+  senderID: string;
+  receiverID: string;
+};
