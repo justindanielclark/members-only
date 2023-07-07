@@ -9,14 +9,19 @@ type AnimationState = (typeof animatingStates)[number];
 type Props = {
   title: string;
   children: React.ReactNode;
+  openOnLoad?: boolean;
 };
 
-export default function Accordian({ title, children }: Props) {
+export default function Accordian({ title, children, openOnLoad }: Props) {
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const [animationState, setAnimationState] = useState<AnimationState>(
+    openOnLoad === true || openOnLoad === undefined ? "initializing" : "closed"
+  );
   useEffect(() => {
-    setAnimationState("initialized");
-  }, [panelRef]);
-  const [animationState, setAnimationState] = useState<AnimationState>("initializing");
+    if (animationState == "initializing") {
+      setAnimationState("initialized");
+    }
+  }, [animationState, panelRef]);
   const handleClick = () => {
     if (animationState === "closed") {
       setAnimationState("open");
