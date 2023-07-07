@@ -17,6 +17,7 @@ import { Metadata } from "next";
 import UserContext from "@/lib/providers/UserProvider";
 import _mongo from "@/lib/mongoDB/_mongo";
 import Controls from "./components/Controls";
+import Accordian from "@/lib/sharedComponents/Containers/Accordian";
 
 type Props = {
   params: {
@@ -97,6 +98,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
             </section>
 
             {/* TODO */}
+
             {/* Poster Image */}
             <section className="w-full flex justify-center items-center md:w-fit h-fit basis-fit">
               <ImageWithFallback
@@ -174,47 +176,48 @@ export default async function MoviePage({ params: { movieID } }: Props) {
       const CastCrewAndRecommendationContent: JSX.Element = (
         <>
           {cast.length > 0 || reducedCrew.length > 0 ? (
-            <SubMainContainer className="px-4 py-8 bg-slate-700/20 gap-6 flex flex-col">
-              <section>
+            <SubMainContainer className="px-4 py-8 flex flex-col">
+              <Accordian title="Cast and Crew">
                 <Link
                   href={`/movie/${movie.id}/castandcrew`}
-                  className="flex flex-row gap-1 items-center justify-end text-sm hover:underline"
+                  className="flex flex-row gap-1 items-center justify-end text-sm hover:underline py-4 px-2"
                 >
                   <LinkIcon />
                   <span>View Full Cast and Crew</span>
                 </Link>
-              </section>
-              {cast.length > 0 ? (
-                <section className="">
-                  <h2 className="text-2xl font-bold">Top Billed Cast:</h2>
-                  <div className="w-full h-fit px-5">
-                    <div className="flex flex-row overflow-y-hidden gap-4">
-                      {cast.slice(0, 10).map((credit) => {
-                        return <CastCreditCard credit={credit} key={credit.id} />;
-                      })}
+
+                {cast.length > 0 ? (
+                  <div className="mb-4">
+                    <h2 className="text-2xl font-bold">Top Billed Cast:</h2>
+                    <div className="w-full h-fit px-5">
+                      <div className="flex flex-row overflow-y-hidden gap-4">
+                        {cast.slice(0, 10).map((credit) => {
+                          return <CastCreditCard credit={credit} key={credit.id} />;
+                        })}
+                      </div>
                     </div>
                   </div>
-                </section>
-              ) : undefined}
-              {reducedCrew.length > 0 ? (
-                <section className="">
-                  <h2 className="text-2xl font-bold">Notable Crew:</h2>
-                  <div className="w-full h-fit px-5">
-                    <div className="flex flex-row overflow-y-hidden gap-4 justify-start items-stretch">
-                      {reducedCrew.slice(0, reducedCrew.length >= 10 ? 10 : reducedCrew.length).map((credit) => {
-                        return <CastCreditCard credit={credit} key={credit.id} />;
-                      })}
+                ) : undefined}
+                {reducedCrew.length > 0 ? (
+                  <div className="mb-4">
+                    <h2 className="text-2xl font-bold">Notable Crew:</h2>
+                    <div className="w-full h-fit px-5">
+                      <div className="flex flex-row overflow-y-hidden gap-4 justify-start items-stretch">
+                        {reducedCrew.slice(0, reducedCrew.length >= 10 ? 10 : reducedCrew.length).map((credit) => {
+                          return <CastCreditCard credit={credit} key={credit.id} />;
+                        })}
+                      </div>
                     </div>
                   </div>
-                </section>
-              ) : undefined}
+                ) : undefined}
+              </Accordian>
+
               {fetchedRecommendations.length > 0 ? (
-                <section>
-                  <h2 className="text-2xl font-bold">Recommended Movies:</h2>
+                <Accordian title="Recommended Movies">
                   <div className="w-full h-fit px-5">
                     <Recommendations movies={fetchedRecommendations} />
                   </div>
-                </section>
+                </Accordian>
               ) : undefined}
             </SubMainContainer>
           ) : undefined}

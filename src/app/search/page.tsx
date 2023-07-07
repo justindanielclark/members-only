@@ -1,13 +1,9 @@
 import getSessionOnServer from "@/lib/providers/getSessionOnServer";
 import { redirect } from "next/navigation";
 import MainContainer from "@/lib/sharedComponents/MainContainer";
-import Link from "next/link";
 import searchMovieTitle, { nothingFound } from "@/lib/TMDB/searchMovieTitle";
-import SearchBar from "@/lib/sharedComponents/SearchBar";
-import Result from "./component/Result";
 import _mongo from "@/lib/mongoDB/_mongo";
 import { Metadata } from "next";
-import SectionContainer from "@/lib/sharedComponents/Containers/SectionContainer";
 import MainHeader from "@/lib/sharedComponents/Headers/MainHeader";
 import InvalidParamsContent from "./component/InvalidParamsPage";
 import ValidParamsPage from "./component/ValidParamsPage";
