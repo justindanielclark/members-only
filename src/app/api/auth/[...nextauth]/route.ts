@@ -1,10 +1,27 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { AuthOptions, User } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import _mongo from "@/lib/mongoDB/_mongo";
 
 export const authOptions: AuthOptions = {
   providers: [
+    Credentials({
+      id: "password",
+      name: "A Test Account",
+      credentials: {
+        email: { label: "Email", type: "text", placeholder: "john@gmail.com" },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: async (credentials, req) => {
+        const user = { id: "1", name: "J Smith", email: "test_user@example.com" };
+        if (credentials?.email == user.email && credentials.password == "test_password") {
+          return user;
+        } else {
+          return null;
+        }
+      },
+    }),
     GitHub({
       clientId: process.env.GITHUB_ID as string,
       clientSecret: process.env.GITHUB_SECRET as string,
