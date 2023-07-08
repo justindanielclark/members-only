@@ -1,1 +1,2 @@
-1. Make sure user profile photo hasn't been changed between log ins.
+On Deployment
+1) Turn on process watch SIGTERM watch for DbConnection.ts

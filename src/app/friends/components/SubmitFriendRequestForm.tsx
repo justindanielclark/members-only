@@ -4,7 +4,11 @@ import SubHeader from "@/lib/sharedComponents/Headers/SubHeader";
 import { toast } from "react-toastify";
 import makeFriendRequest from "@/lib/api/makeFriendRequest";
 
-export default function SubmitFriendRequestForm() {
+type Props = {
+  profileUserID: string;
+};
+
+export default function SubmitFriendRequestForm({ profileUserID }: Props) {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [inputFriendID, setInputFriendID] = useState<string>("");
 
@@ -14,7 +18,7 @@ export default function SubmitFriendRequestForm() {
   const handleSubmit = (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const submissionRequest = makeFriendRequest({ userID: inputFriendID })
+    const submissionRequest = makeFriendRequest({ receiverUserID: inputFriendID, senderUserID: profileUserID })
       .then((res) => {
         if (!res.ok) {
           throw new Error();

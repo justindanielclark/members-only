@@ -4,7 +4,7 @@ import createFriendRequest from "./createFriendRequest";
 import retrieveFriendRequstsByReceiver from "./retrieveFriendRequestsByReceiver";
 import retrieveFriendRequstsBySender from "./retrieveFriendRequestsBySender";
 
-export async function getUserCollection() {
+export async function getFriendRequestsCollection() {
   const database = await getMovieDatabaseCollection();
   try {
     return database.collection<FriendRequest>("Friend Requests");

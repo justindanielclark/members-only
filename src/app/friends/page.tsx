@@ -16,7 +16,7 @@ export default async function FriendsPage() {
     return (
       <MainContainer>
         <div className="max-w-xl mx-auto p-4">
-          <SubmitFriendRequestForm />
+          <SubmitFriendRequestForm profileUserID={user._id.toString()} />
           <Accordian title="Your Friends:" openOnLoad={false}>
             <div>You have no friends</div>
           </Accordian>

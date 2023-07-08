@@ -32,5 +32,10 @@ type UpdateUserRequest = {
 };
 
 type FriendRequestRequest = {
-  userID: string;
+  senderUserID: string;
+  receiverUserID: string;
+};
+
+type simpleMessage = {
+  message: string;
 };

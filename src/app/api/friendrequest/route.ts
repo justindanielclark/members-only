@@ -1,47 +1,80 @@
 import _mongo from "@/lib/mongoDB/_mongo";
 import { NextRequest, NextResponse } from "next/server";
 
-const PossibleErrors = ["Unknown Error", "No Data Provided for UserID", "No User Found For That ID"] as const;
-type PossibleError = (typeof PossibleErrors)[number];
+const PossibleErrors = {
+  unknownError: "Unknown Error",
+  noDataForSenderID: "No Data For Sender ID",
+  noDataForReceiverID: "No Data For Receiver ID",
+  noIDData: "No ID Data Passed To Server",
+  noUserDataForID: "No User Found For That ID",
+} as const;
+
+type PossibleError = (typeof PossibleErrors)[keyof typeof PossibleErrors];
 
 export async function POST(req: NextRequest, res: NextResponse) {
-  console.log("Post request hit");
   try {
     const data = (await req.json()) as FriendRequestRequest;
-    const { userID } = data;
-    if (userID === "" || userID == undefined) {
-      throw new Error("No Data Provided for UserID");
+    const { receiverUserID, senderUserID } = data;
+    const receiverIDisBad = receiverUserID === "" || receiverUserID == undefined;
+    const senderIDisBad = senderUserID === "" || senderUserID == undefined;
+    if (receiverIDisBad || senderIDisBad) {
+      if (receiverIDisBad && senderIDisBad) throw new Error(PossibleErrors.noIDData);
+      if (receiverIDisBad) throw new Error(PossibleErrors.noDataForReceiverID);
+      if (senderIDisBad) throw new Error(PossibleErrors.noDataForSenderID);
     }
+    try {
+      const [sender, receiver] = await Promise.all([
+        _mongo.user.retrieveUserByID(senderUserID),
+        _mongo.user.retrieveUserByID(receiverUserID),
+      ]);
 
-    const retrievedUser = await _mongo.user.retrieveUserByID(userID);
-    console.log("RETREIVED USER");
-    console.log(retrievedUser);
+      //TODO: Verify existing requests don't already exist, verify a sender isn't sending to a person they are awaiting a response from
 
-    const API_Res: API_Response<undefined> = {
-      message: "Success",
-      data: undefined,
-    };
-    return NextResponse.json(API_Res, { status: 200 });
+      await _mongo.friendRequests.createFriendRequest(senderUserID, receiverUserID);
+
+      const API_Res: API_Response<simpleMessage> = {
+        message: "Success",
+        data: { message: "Friend Request Created!" },
+      };
+      return NextResponse.json(API_Res, { status: 200 });
+    } catch {
+      throw new Error(PossibleErrors.noUserDataForID);
+    }
   } catch (error) {
+    // UNHAPPY PATH
     let message: PossibleError = "Unknown Error";
     if (error instanceof Error) message = error.message as PossibleError;
 
-    const API_Res: API_Response<undefined> = {
+    const API_Res: API_Response<simpleMessage> = {
       message: "Failure",
-      data: undefined,
+      data: { message: "" },
     };
     let Response_Init: ResponseInit;
 
     switch (message) {
-      case "No Data Provided for UserID": {
+      case PossibleErrors.noDataForReceiverID: {
         Response_Init = {
           status: 400,
         };
+        API_Res.data.message = PossibleErrors.noDataForReceiverID;
       }
-      case "No User Found For That ID": {
+      case PossibleErrors.noDataForSenderID: {
         Response_Init = {
           status: 400,
         };
+        API_Res.data.message = PossibleErrors.noDataForSenderID;
+      }
+      case PossibleErrors.noIDData: {
+        Response_Init = {
+          status: 400,
+        };
+        API_Res.data.message = PossibleErrors.noIDData;
+      }
+      case PossibleErrors.noUserDataForID: {
+        Response_Init = {
+          status: 400,
+        };
+        API_Res.data.message = PossibleErrors.noUserDataForID;
       }
       default: {
         Response_Init = {

@@ -12,9 +12,9 @@ const DbConnection = function () {
           process.exit(0);
         });
       };
-      process.on("SIGTERM", () => gracefulShutdown());
-      process.on("SIGINT", () => gracefulShutdown());
-      process.on("SIGHUP", () => gracefulShutdown());
+      // process.on("SIGTERM", () => gracefulShutdown());
+      // process.on("SIGINT", () => gracefulShutdown());
+      // process.on("SIGHUP", () => gracefulShutdown());
       return _db;
     } catch {
       throw new Error("Unable to connect to MongoDb URL in DbConnection.ts");
