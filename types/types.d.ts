@@ -7,7 +7,7 @@ type User = {
   aboutMe: string;
   photoPath: string;
   lists: Array<List>;
-  friends: Array<Friend>;
+  friends: Array<string>;
 };
 
 type ProviderUser = {
@@ -24,11 +24,6 @@ type List = {
 type CompleteList = {
   name: string;
   movies: Array<FetchedMovie>;
-};
-
-type Friend = {
-  name: string;
-  _id: ObjectId;
 };
 
 type Toast = {

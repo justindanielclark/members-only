@@ -7,6 +7,7 @@ import retrieveUserByID from "./retrieveUserByID";
 import updateUserWatchedList from "./updateUserWatchedList";
 import updateUserSeenList from "./updateUserSeenList";
 import updateUserProfile from "./updateUserProfile";
+import updateUserFriendList from "./updateUserFriendList";
 
 export async function getUserCollection() {
   const database = await getMovieDatabaseCollection();
@@ -25,6 +26,7 @@ const exportable = {
   updateUserWatchedList,
   updateUserSeenList,
   updateUserProfile,
+  updateUserFriendList,
 };
 
 export default exportable;

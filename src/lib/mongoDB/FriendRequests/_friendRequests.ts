@@ -1,8 +1,9 @@
 import { FriendRequest } from "../../../../types/types";
 import getMovieDatabaseCollection from "../getMovieDatabaseCollection";
 import createFriendRequest from "./createFriendRequest";
-import retrieveFriendRequstsByReceiver from "./retrieveFriendRequestsByReceiver";
-import retrieveFriendRequstsBySender from "./retrieveFriendRequestsBySender";
+import retrieveFriendRequestsByID from "./retrieveFriendRequestsByID";
+import retrieveSpecificFriendRequest from "./retrieveSpecificFriendRequest";
+import deleteFriendRequest from "./deleteFriendRequest";
 
 export async function getFriendRequestsCollection() {
   const database = await getMovieDatabaseCollection();
@@ -15,8 +16,9 @@ export async function getFriendRequestsCollection() {
 
 const exportable = {
   createFriendRequest,
-  retrieveFriendRequstsByReceiver,
-  retrieveFriendRequstsBySender,
+  retrieveFriendRequestsByID,
+  retrieveSpecificFriendRequest,
+  deleteFriendRequest,
 };
 
 export default exportable;

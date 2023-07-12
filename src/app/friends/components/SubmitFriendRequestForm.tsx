@@ -21,16 +21,18 @@ export default function SubmitFriendRequestForm({ profileUserID }: Props) {
     const submissionRequest = makeFriendRequest({ receiverUserID: inputFriendID, senderUserID: profileUserID })
       .then((res) => {
         if (!res.ok) {
-          throw new Error();
+          throw new Error(res.statusText);
         } else {
-          return res;
+          return res.json() as Promise<API_Response<simpleMessage>>;
         }
       })
-      .then(() => {
-        toast("Friend Added!");
+      .then((data) => {
+        toast(data.data.message);
       })
       .catch((err) => {
-        toast("Unable to Complete Request", {});
+        let message = "";
+        if (err instanceof Error) message = err.message;
+        toast("Unable to Complete Request: \n" + message);
       })
       .finally(() => {
         setIsSubmitting(false);
