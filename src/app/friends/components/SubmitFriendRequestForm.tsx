@@ -4,11 +4,14 @@ import SubHeader from "@/lib/sharedComponents/Headers/SubHeader";
 import { toast } from "react-toastify";
 import makeFriendRequest from "@/lib/api/makeFriendRequest";
 
+import { useRouter } from "next/navigation";
+
 type Props = {
   profileUserID: string;
 };
 
 export default function SubmitFriendRequestForm({ profileUserID }: Props) {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [inputFriendID, setInputFriendID] = useState<string>("");
 
@@ -18,7 +21,7 @@ export default function SubmitFriendRequestForm({ profileUserID }: Props) {
   const handleSubmit = (e: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const submissionRequest = makeFriendRequest({ receiverUserID: inputFriendID, senderUserID: profileUserID })
+    makeFriendRequest({ receiverUserID: inputFriendID, senderUserID: profileUserID })
       .then((res) => {
         if (!res.ok) {
           throw new Error(res.statusText);
@@ -32,14 +35,20 @@ export default function SubmitFriendRequestForm({ profileUserID }: Props) {
       .catch((err) => {
         let message = "";
         if (err instanceof Error) message = err.message;
-        toast("Unable to Complete Request: \n" + message);
+        toast(
+          <div className="flex flex-col">
+            <p className="font-bold underline">Unable to Complete Request:</p>
+            <p>{message}</p>
+          </div>
+        );
       })
       .finally(() => {
         setIsSubmitting(false);
+        router.refresh();
       });
   };
   return (
-    <section>
+    <section className="my-4">
       <SubHeader>Send a Friend Request To Another User:</SubHeader>
       <form action="" method="POST" className="my-2">
         <div className="flex flex-col">
