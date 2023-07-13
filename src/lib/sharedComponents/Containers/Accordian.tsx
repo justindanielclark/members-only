@@ -22,6 +22,7 @@ export default function Accordian({ title, children, openOnLoad }: Props) {
       setAnimationState("initialized");
     }
   }, [animationState, panelRef]);
+
   const handleClick = () => {
     if (animationState === "closed") {
       setAnimationState("open");
@@ -65,10 +66,10 @@ export default function Accordian({ title, children, openOnLoad }: Props) {
     <section className="w-full h-fit group/accordian">
       {/* Controls */}
       <button
-        className="flex flex-row justify-between w-full p-4 group-even/accordian:bg-slate-950 group-odd/accordian:bg-slate-950/50"
+        className="flex flex-row items-center justify-between w-full p-4 group-even/accordian:bg-slate-950 group-odd/accordian:bg-slate-950/50"
         onClick={handleClick}
       >
-        <span className="block font-bold text-2xl">{title}</span>
+        <span className="block font-bold text-xl">{title}</span>
         {animationState === "closed" ? <PlusIcon /> : <MinusIcon />}
       </button>
       {/* Display */}
