@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId, WithId } from "mongodb";
 
 type User = {
   //Combination of email[provider] ~ Example: jclark@gmail.com[github]
@@ -41,4 +41,9 @@ type FriendRequest = {
   sent: Date;
   senderID: string;
   receiverID: string;
+};
+
+type FriendWithSharedMoviesInfo = {
+  friend: WithId<User>;
+  numShared: number;
 };

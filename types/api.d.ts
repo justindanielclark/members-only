@@ -31,7 +31,7 @@ type UpdateUserRequest = {
   aboutMe: string;
 };
 
-type FriendRequestRequest = {
+type FriendRequest_PostRequest = {
   senderUserID: string;
   receiverUserID: string;
 };
