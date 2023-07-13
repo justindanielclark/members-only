@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function ImageWithFallback({ src, alt, crossOrigin, width, height, priority, className }: Props) {
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(src !== "");
   const content = isValid ? (
     <Image
       src={src}
