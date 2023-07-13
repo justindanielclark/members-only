@@ -6,11 +6,12 @@ import { User } from "../../../../types/types";
 const PossibleErrors = {
   unknownError: "Unknown Error",
   noDataForSenderID: "No Data For Sender ID",
-  noDataForReceiverID: "No Data For Receiver ID",
+  noDataForReceiverID: "Invalid User Profile ID Sent",
   noIDData: "No ID Data Passed To Server",
   noUserDataForID: "No User Found For That ID",
   requestAlreadySent: "User has previously requested this friendship",
   senderIDMatchesReceiverID: "Cannot Add Yourself As Friend",
+  alreadyAFriend: "Cannot Add User Who Is Already A Friend",
 } as const;
 
 type PossibleError = (typeof PossibleErrors)[keyof typeof PossibleErrors];
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
   try {
     let API_Res: API_Response<simpleMessage>;
     let Response_Init: ResponseInit;
-    const data = (await req.json()) as FriendRequestRequest;
+    const data = (await req.json()) as FriendRequest_PostRequest;
     const { receiverUserID, senderUserID } = data;
     const receiverIDisBad = receiverUserID === "" || receiverUserID == undefined || !ObjectId.isValid(receiverUserID);
     const senderIDisBad = senderUserID === "" || senderUserID == undefined || !ObjectId.isValid(senderUserID);
@@ -38,6 +39,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
     if (sender !== null && receiver !== null) {
       const senderID = (sender as WithId<User>)._id.toString();
       const receiverID = (receiver as WithId<User>)._id.toString();
+      const isExistingFriend = sender.friends.find((friend) => friend === receiverID);
+      if (isExistingFriend) {
+        throw new Error(PossibleErrors.alreadyAFriend);
+      }
       const [outgoing, incoming] = await Promise.all([
         _mongo.friendRequests.retrieveSpecificFriendRequest(senderID, receiverID),
         _mongo.friendRequests.retrieveSpecificFriendRequest(receiverID, senderID),
@@ -139,6 +144,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
           statusText: PossibleErrors.senderIDMatchesReceiverID,
         };
         API_Res.data.message = PossibleErrors.senderIDMatchesReceiverID;
+        break;
+      }
+      case PossibleErrors.alreadyAFriend: {
+        Response_Init = {
+          status: 400,
+          statusText: PossibleErrors.alreadyAFriend,
+        };
+        API_Res.data.message = PossibleErrors.alreadyAFriend;
         break;
       }
       default: {
