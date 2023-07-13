@@ -133,21 +133,21 @@ function HeaderMenu({ state, setState }: HeaderMenuProps) {
       }}
     >
       <ul className="flex flex-col min-w-56 pt-4">
-        <li className="text-right whitespace-nowrap p-2 cursor-pointer hover:bg-slate-700/80">
-          <Link href={"/profile"} className="w-full flex flex-row items-center gap-4 justify-end">
+        <li className="text-right whitespace-nowrap cursor-pointer hover:bg-slate-700/80">
+          <Link href={"/profile"} className="w-full p-2 flex flex-row items-center gap-4 justify-end">
             <span>Profile / Settings</span>
             <GearIcon />
           </Link>
         </li>
-        <li className="text-right whitespace-nowrap p-2 cursor-pointer hover:bg-slate-700/80">
-          <Link href={"/friends"} className="w-full flex flex-row items-center gap-4 justify-end">
+        <li className="text-right whitespace-nowrap cursor-pointer hover:bg-slate-700/80">
+          <Link href={"/friends"} className="w-full p-2 flex flex-row items-center gap-4 justify-end">
             <span>View and Add Friends</span>
             <FriendIcon />
           </Link>
         </li>
-        <li className="text-right whitespace-nowrap p-2 cursor-pointer hover:bg-slate-700/80">
+        <li className="text-right whitespace-nowrap cursor-pointer hover:bg-slate-700/80">
           <button
-            className="w-full text-right flex flex-row items-center gap-4 justify-end"
+            className="w-full text-right flex flex-row p-2 items-center gap-4 justify-end"
             onClick={(e) => {
               e.preventDefault();
               signOut();
