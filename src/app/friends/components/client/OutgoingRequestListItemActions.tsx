@@ -25,6 +25,7 @@ export default function OutGoingRequestListItemActions({ profileID, requestID }:
       })
       .then((data) => {
         toast(data.message);
+        router.refresh();
       })
       .catch((err) => {
         let message = "";
@@ -36,9 +37,6 @@ export default function OutGoingRequestListItemActions({ profileID, requestID }:
           </div>
         );
         setIsSubmitting(false);
-      })
-      .finally(() => {
-        router.refresh();
       });
   };
   return (
