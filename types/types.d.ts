@@ -43,6 +43,15 @@ type FriendRequest = {
   receiverID: string;
 };
 
+type AcceptFriendRequest = {
+  requestID: string;
+};
+
+type RemoveFriendRequest = {
+  requestorID: string;
+  friendID: string;
+};
+
 type FriendWithSharedMoviesInfo = {
   friend: WithId<User>;
   numShared: number;
