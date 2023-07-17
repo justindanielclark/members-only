@@ -50,8 +50,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
             setProcessingSeenRequest(false);
             UserContext.removeSeenListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(removalPromise, {
           pending: `Removing ${movie.title} from Seen List`,
           success: `${movie.title} removed from Seen List`,
@@ -69,8 +68,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
             setProcessingSeenRequest(false);
             UserContext.addSeenListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(addPromise, {
           pending: `Adding ${movie.title} to Seen List`,
           success: `${movie.title} added to Seen List`,
@@ -97,8 +95,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
             setProcessingWatchlistRequest(false);
             UserContext.removeWatchListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(removalPromise, {
           pending: `Removing ${movie.title} from Watch List`,
           success: `${movie.title} removed from Watch List`,
@@ -119,8 +116,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
             setProcessingWatchlistRequest(false);
             UserContext.addWatchListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(addPromise, {
           pending: `Adding ${movie.title} to Watch List`,
           success: `${movie.title} added to Watch List`,

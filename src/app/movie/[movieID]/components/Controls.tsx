@@ -43,8 +43,7 @@ export default function Controls({ movie }: Props) {
             setProcessingSeenRequest(false);
             UserContext.removeSeenListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(removalPromise, {
           pending: `Removing ${movie.title} from Seen List`,
           success: `${movie.title} removed from Seen List`,
@@ -62,8 +61,7 @@ export default function Controls({ movie }: Props) {
             setProcessingSeenRequest(false);
             UserContext.addSeenListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(addPromise, {
           pending: `Adding ${movie.title} to Seen List`,
           success: `${movie.title} added to Seen List`,
@@ -87,8 +85,7 @@ export default function Controls({ movie }: Props) {
             setProcessingWatchlistRequest(false);
             UserContext.removeWatchListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(removalPromise, {
           pending: `Removing ${movie.title} from Watch List`,
           success: `${movie.title} removed from Watch List`,
@@ -106,8 +103,7 @@ export default function Controls({ movie }: Props) {
             setProcessingWatchlistRequest(false);
             UserContext.addWatchListMovie(movie.id);
             router.refresh();
-          })
-          .catch((err) => console.log(err.message));
+          });
         toast.promise(addPromise, {
           pending: `Adding ${movie.title} to Watch List`,
           success: `${movie.title} added to Watch List`,
