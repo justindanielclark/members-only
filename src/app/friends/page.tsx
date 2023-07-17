@@ -87,7 +87,7 @@ export default async function FriendsPage() {
         <div className="max-w-xl mx-auto">
           <section>
             <SubHeader>Your Friends:</SubHeader>
-            <Friends friends={friends} sharedMovies={sharedMoviesNumArray} />
+            <Friends user={user} friends={friends} sharedMovies={sharedMoviesNumArray} />
           </section>
 
           {incomingRequests.length > 0 ? (

@@ -3,6 +3,7 @@ import { WithId } from "mongodb";
 import { User } from "../../../../types/types";
 import ImageWithFallback from "@/lib/sharedComponents/FallbackImage";
 import OutGoingRequestListItemActions from "./client/OutgoingRequestListItemActions";
+import InComingRequestListItemActions from "./client/IncomingRequestListItemActions";
 
 type Props = {
   lookup: "senderID" | "receiverID";
@@ -53,11 +54,7 @@ function IncomingRequestListItem({ request, user }: RequestListItemProps) {
           </div>
         </div>
         {/* Actions */}
-        <div className="flex sm:flex-col flex-row text-xs h-full justify-end gap-2 sm:gap-0">
-          <button className="text-right hover:underline p-1 grow-0 shrink">View Profile</button>
-          <button className="text-green-400  text-right hover:underline p-1 grow-0 shrink">Accept</button>
-          <button className="text-red-400  text-right hover:underline p-1 grow-0 shrink">Deny</button>
-        </div>
+        <InComingRequestListItemActions requestID={request._id.toString()} profileID={user._id.toString()} />
       </div>
     </li>
   );

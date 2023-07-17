@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import acceptFriendRequest from "@/lib/api/acceptFriendRequest";
 import deleteFriendRequest from "@/lib/api/deleteFriendRequest";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -10,43 +11,36 @@ type Props = {
   requestID: string;
 };
 
-export default function OutGoingRequestListItemActions({ profileID, requestID }: Props) {
+export default function InComingRequestListItemActions({ profileID, requestID }: Props) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const handleAcceptClick = () => {
     setIsSubmitting(true);
-    Promise.all([() => {}, () => {}])
-      .catch(() => {})
+    acceptFriendRequest(requestID)
+      .then((res) => {
+        toast(res.statusText);
+        router.refresh();
+      })
+      .catch(() => {
+        toast("There Was An Error With The Request");
+      })
       .finally(() => {
         setIsSubmitting(false);
       });
-
-    // deleteFriendRequest(requestID)
-    //   .then((res) => {
-    //     if (!res.ok) {
-    //       throw new Error(res.statusText);
-    //     } else {
-    //       return res.json() as Promise<API_Response<simpleMessage>>;
-    //     }
-    //   })
-    //   .then((data) => {
-    //     toast(data.message);
-    //     router.refresh();
-    //   })
-    //   .catch((err) => {
-    //     let message = "";
-    //     if (err instanceof Error) message = err.message;
-    //     toast(
-    //       <div className="flex flex-col">
-    //         <p className="font-bold underline">Unable to Complete Request:</p>
-    //         <p>{message}</p>
-    //       </div>
-    //     );
-    //     setIsSubmitting(false);
-    //   });
   };
   const handleDenyClick = () => {
-    return;
+    setIsSubmitting(true);
+    deleteFriendRequest(requestID)
+      .then((res) => {
+        toast(res.statusText);
+        router.refresh();
+      })
+      .catch(() => {
+        toast("There Was An Error With The Request");
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   };
   return (
     <div className="flex sm:flex-col flex-row text-xs h-full justify-end gap-2 sm:gap-0">

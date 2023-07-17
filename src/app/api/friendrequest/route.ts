@@ -1,7 +1,10 @@
 import _mongo from "@/lib/mongoDB/_mongo";
 import { NextRequest, NextResponse } from "next/server";
-import { ObjectId, WithId } from "mongodb";
+import { ObjectId, WithId, TransactionOptions } from "mongodb";
 import { User } from "../../../../types/types";
+import _mongoGetConnection from "@/lib/mongoDB/DbConnection";
+import { getFriendRequestsCollection } from "@/lib/mongoDB/FriendRequests/_friendRequests";
+import { getUserCollection } from "@/lib/mongoDB/User/_user";
 
 const PossibleErrors = {
   unknownError: "Unknown Error",
@@ -57,11 +60,21 @@ export async function POST(req: NextRequest, res: NextResponse) {
           statusText: "Friend Request Already Exists",
         };
       } else if (incoming) {
-        await Promise.all([
-          _mongo.user.updateUserFriendList(senderID, [...sender.friends, receiverID]),
-          _mongo.user.updateUserFriendList(receiverID, [...receiver.friends, senderID]),
-          _mongo.friendRequests.deleteFriendRequest(receiverID, senderID),
-        ]);
+        const connection = await _mongoGetConnection.get();
+        const _users = await getUserCollection();
+        const _friendRequests = await getFriendRequestsCollection();
+        const session = connection.startSession();
+        const transactionOptions: TransactionOptions = {
+          readPreference: "primary",
+          readConcern: { level: "available" },
+          writeConcern: { w: "majority" },
+        };
+        session.startTransaction(transactionOptions);
+        await _friendRequests.deleteOne({ receiverID: incoming._id.toString() }, { session });
+        await _users.updateOne({ _id: sender._id }, { $push: { friends: receiver._id.toString() } }, { session });
+        await _users.updateOne({ _id: receiver._id }, { $push: { friends: sender._id.toString() } }, { session });
+        await session.commitTransaction();
+
         API_Res = {
           message: "Success",
           data: { message: "Friend Added" },
@@ -82,7 +95,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         };
       }
 
-      return NextResponse.json(API_Res, { status: 200 });
+      return NextResponse.json(API_Res, Response_Init);
     } else {
       API_Res = {
         message: "Failure",
