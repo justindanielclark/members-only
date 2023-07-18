@@ -18,6 +18,7 @@ import UserContext from "@/lib/providers/UserProvider";
 import _mongo from "@/lib/mongoDB/_mongo";
 import Controls from "./components/Controls";
 import Accordian from "@/lib/sharedComponents/Containers/Accordian";
+import minutesToRuntime from "@/lib/utils/minutesToRuntime";
 
 type Props = {
   params: {
@@ -93,11 +94,15 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                     .join(" / ")}
                 </p>
               ) : undefined}
-
-              {/* Rating, Release Date, Genres, Runtime */}
+              {/* Rating, Release Date, Runtime */}
+              {movie.runtime > 0 ? (
+                <p className="px-4 text-sm">
+                  <span className="pr-2">Runtime:</span>
+                  {minutesToRuntime(movie.runtime)}
+                </p>
+              ) : undefined}
+              {/* TODO */}
             </section>
-
-            {/* TODO */}
 
             {/* Poster Image */}
             <section className="w-full flex justify-center items-center md:w-fit h-fit basis-fit">
@@ -116,7 +121,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
               {movie.tagline && movie.tagline !== "" ? (
                 <p className="italic text-lg font-bold">{`"${movie.tagline}"`}</p>
               ) : undefined}
-              {movie.overview ? <p className="px-4 italic">{movie.overview}</p> : undefined}
+              {movie.overview ? <p className="px-4 py-2 italic max-w-3xl mx-auto">{movie.overview}</p> : undefined}
               {movie.production_companies && movie.production_companies.length > 0 ? (
                 <div className="my-2">
                   <h3 className="font-bold">Produced By:</h3>
@@ -136,7 +141,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
                     <h3 className="font-bold">Status:</h3>
                     <p>{movie.status}</p>
                   </div>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col max-w-[200px]">
                     <h3 className="font-bold">Spoken Languages:</h3>
                     <p>
                       {movie.spoken_languages
