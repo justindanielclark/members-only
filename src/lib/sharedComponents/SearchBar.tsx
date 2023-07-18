@@ -45,7 +45,6 @@ export default function SearchBar({ lastSearch }: Props) {
                 newURL.searchParams.set("query", searchTerm);
                 router.push(`/search?${newURL.searchParams.toString()}`);
               }
-              return false;
             }}
           >
             Search
