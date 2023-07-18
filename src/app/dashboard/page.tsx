@@ -5,7 +5,7 @@ import MainContainer from "@/lib/sharedComponents/MainContainer";
 import SearchBar from "@/lib/sharedComponents/SearchBar";
 import getPopularMovies from "@/lib/TMDB/getPopularMovies";
 import _mongo from "@/lib/mongoDB/_mongo";
-import UserMovieList from "./components/UserMovieLists";
+import UserMovieList from "@/lib/sharedComponents/UserMovieList";
 import UserContext from "@/lib/providers/UserProvider";
 import getAllMovies from "@/lib/TMDB/getAllMovies";
 import { getUserListByName } from "@/lib/utils/getUserListByName";
