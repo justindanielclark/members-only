@@ -1,15 +1,32 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import SectionContainer from "./Containers/SectionContainer";
+import Link from "next/link";
 
 type Props = {
   lastSearch: string;
 };
 
+const invalidChars = "'\"\\}]{[:;/?.>,<)(";
+const invalidSearchTerms = new Map<string, boolean>(invalidChars.split("").map((char) => [char, true]));
+const validSearchLength = (term: string): number => {
+  const termChars = term.split("");
+  return termChars.reduce((acc, cur) => {
+    if (invalidSearchTerms.get(cur) === undefined) {
+      acc.push(cur);
+    }
+    return acc;
+  }, [] as Array<string>).length;
+};
+
 export default function SearchBar({ lastSearch }: Props) {
   const [searchTerm, setSearchTerm] = useState(lastSearch);
-  const router = useRouter();
+  const generateSearchURL = (searchTerm: string) => {
+    const newURL = new URL(window.location.host);
+    newURL.searchParams.set("page", "1");
+    newURL.searchParams.set("query", searchTerm);
+    return `/search?${newURL.searchParams.toString()}`;
+  };
   return (
     <SectionContainer id="searchBar">
       <form role="navigation" className="w-full p-4">
@@ -26,29 +43,23 @@ export default function SearchBar({ lastSearch }: Props) {
             }}
             value={searchTerm}
           />
-          <button
-            role="navigation"
-            className="inline-block sm:w-24 w-full bg-green-800 px-2 py-1"
-            onClick={(e) => {
-              e.preventDefault();
-              if (
-                searchTerm !== "" &&
-                searchTerm.split("").reduce((acc, cur) => {
-                  if (cur !== " ") {
-                    acc += cur;
-                  }
-                  return acc;
-                }, "") !== ""
-              ) {
-                const newURL = new URL(window.location.host);
-                newURL.searchParams.set("page", "1");
-                newURL.searchParams.set("query", searchTerm);
-                router.push(`/search?${newURL.searchParams.toString()}`);
-              }
-            }}
-          >
-            Search
-          </button>
+          {validSearchLength(searchTerm) > 0 ? (
+            <Link
+              href={generateSearchURL(searchTerm)}
+              role="navigation"
+              className="inline-block sm:w-24 w-full bg-green-800 px-2 py-1"
+            >
+              Search
+            </Link>
+          ) : (
+            <button
+              role="navigation"
+              className="inline-block sm:w-24 w-full bg-green-800 px-2 py-1"
+              onClick={(e) => {}}
+            >
+              Search
+            </button>
+          )}
         </div>
       </form>
     </SectionContainer>
