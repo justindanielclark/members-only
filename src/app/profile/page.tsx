@@ -5,6 +5,7 @@ import MainContainer from "@/lib/sharedComponents/MainContainer";
 import _mongo from "@/lib/mongoDB/_mongo";
 import { Metadata } from "next";
 import ProfileForm from "./components/ProfileForm";
+import SubHeader from "@/lib/sharedComponents/Headers/SubHeader";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -39,9 +40,9 @@ async function Dashboard() {
     } else {
       content = (
         <MainContainer>
-          <h1 className="text-2xl font-bold my-8">
+          <SubHeader>
             There has been an issue with the server in retrieving User Data. Please try again later.
-          </h1>
+          </SubHeader>
         </MainContainer>
       );
     }

@@ -3,7 +3,8 @@ import { MouseEvent, useState, ChangeEvent } from "react";
 import SubHeader from "@/lib/sharedComponents/Headers/SubHeader";
 import { toast } from "react-toastify";
 import makeFriendRequest from "@/lib/api/makeFriendRequest";
-
+import CopiedToastId from "@/lib/sharedComponents/Toasts/CopiedToast";
+import ToastWithHeader from "@/lib/sharedComponents/Toasts/ToastWithHeader";
 import { useRouter } from "next/navigation";
 
 type Props = {
@@ -30,17 +31,12 @@ export default function SubmitFriendRequestForm({ profileUserID }: Props) {
         }
       })
       .then((data) => {
-        toast(data.data.message);
+        toast(data.data.message, CopiedToastId);
       })
       .catch((err) => {
         let message = "";
         if (err instanceof Error) message = err.message;
-        toast(
-          <div className="flex flex-col">
-            <p className="font-bold underline">Unable to Complete Request:</p>
-            <p>{message}</p>
-          </div>
-        );
+        toast(<ToastWithHeader title="Unable to Complete Request:" text={message} />, CopiedToastId);
       })
       .finally(() => {
         setIsSubmitting(false);

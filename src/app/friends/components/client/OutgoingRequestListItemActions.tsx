@@ -4,6 +4,8 @@ import { useState } from "react";
 import deleteFriendRequest from "@/lib/api/deleteFriendRequest";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import CopiedToastId from "@/lib/sharedComponents/Toasts/CopiedToast";
+import ToastWithHeader from "@/lib/sharedComponents/Toasts/ToastWithHeader";
 
 type Props = {
   profileID: string;
@@ -24,17 +26,12 @@ export default function OutGoingRequestListItemActions({ profileID, requestID }:
         }
       })
       .then((data) => {
-        toast(data.message);
+        toast(data.message, CopiedToastId);
       })
       .catch((err) => {
         let message = "";
         if (err instanceof Error) message = err.message;
-        toast(
-          <div className="flex flex-col">
-            <p className="font-bold underline">Unable to Complete Request:</p>
-            <p>{message}</p>
-          </div>
-        );
+        toast(<ToastWithHeader title="Unable to Complete Request:" text={message} />, CopiedToastId);
       })
       .finally(() => {
         setIsSubmitting(false);

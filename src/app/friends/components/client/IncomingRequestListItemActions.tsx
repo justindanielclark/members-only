@@ -5,6 +5,7 @@ import acceptFriendRequest from "@/lib/api/acceptFriendRequest";
 import deleteFriendRequest from "@/lib/api/deleteFriendRequest";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import CopiedToastId from "@/lib/sharedComponents/Toasts/CopiedToast";
 
 type Props = {
   profileID: string;
@@ -18,11 +19,11 @@ export default function InComingRequestListItemActions({ profileID, requestID }:
     setIsSubmitting(true);
     acceptFriendRequest(requestID)
       .then((res) => {
-        toast(res.statusText);
+        toast(res.statusText, CopiedToastId);
         router.refresh();
       })
       .catch(() => {
-        toast("There Was An Error With The Request");
+        toast("There Was An Error With The Request", CopiedToastId);
       })
       .finally(() => {
         setIsSubmitting(false);
@@ -32,11 +33,11 @@ export default function InComingRequestListItemActions({ profileID, requestID }:
     setIsSubmitting(true);
     deleteFriendRequest(requestID)
       .then((res) => {
-        toast(res.statusText);
+        toast(res.statusText, CopiedToastId);
         router.refresh();
       })
       .catch(() => {
-        toast("There Was An Error With The Request");
+        toast("There Was An Error With The Request", CopiedToastId);
       })
       .finally(() => {
         setIsSubmitting(false);

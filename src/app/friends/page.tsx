@@ -2,7 +2,7 @@ import MainContainer from "@/lib/sharedComponents/MainContainer";
 import getSessionOnServer from "@/lib/providers/getSessionOnServer";
 import { redirect } from "next/navigation";
 import _mongo from "@/lib/mongoDB/_mongo";
-import Accordian from "@/lib/sharedComponents/Containers/Accordian";
+import { Metadata } from "next";
 import SubmitFriendRequestForm from "./components/SubmitFriendRequestForm";
 import MainHeader from "@/lib/sharedComponents/Headers/MainHeader";
 import Friends from "./components/Friends";
@@ -11,6 +11,12 @@ import { FriendRequest, User } from "../../../types/types";
 import { getUserListByName } from "@/lib/utils/getUserListByName";
 import FriendRequestList from "./components/FriendRequestsList";
 import SubHeader from "@/lib/sharedComponents/Headers/SubHeader";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "MovieBase: Your Friends",
+  };
+}
 
 export default async function FriendsPage() {
   const session = await getSessionOnServer();

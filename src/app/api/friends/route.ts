@@ -104,8 +104,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 }
 
 export async function PUT(req: NextRequest, res: NextResponse) {
-  console.log("hit");
   const { friendID, requestorID } = (await req.json()) as RemoveFriendRequest;
+  const connection = await _mongoGetConnection.get();
+  const _users = await getUserCollection();
+  const session = connection.startSession();
   let API_Res: API_Response<simpleMessage> = {
     message: "Success",
     data: { message: "Friend Removed" },
@@ -123,22 +125,21 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     if (requestor == null || friend == null) {
       throw new Error(PossibleErrors.Unable_To_Locate_Users_By_ID);
     } else {
-      requestor.friends = requestor.friends.filter((friend) => friend !== friendID);
-      friend.friends = friend.friends.filter((friend) => friend !== requestorID);
-      const connection = await _mongoGetConnection.get();
-      const _users = await getUserCollection();
-      const session = connection.startSession();
+      const requestorFriends = requestor.friends.filter((friend) => friend !== friendID);
+      const friendFriends = friend.friends.filter((friend) => friend !== requestorID);
       const transactionOptions: TransactionOptions = {
         readPreference: "primary",
         readConcern: { level: "local" },
         writeConcern: { w: "majority" },
       };
       session.startTransaction(transactionOptions);
-      await _users.updateOne({ _id: requestor._id }, { friends: requestor.friends }, { session });
-      await _users.updateOne({ _id: friend._id }, { friends: friend.friends }, { session });
+      await _users.updateOne({ _id: requestor._id }, { $set: { friends: requestorFriends } }, { session });
+      await _users.updateOne({ _id: friend._id }, { $set: { friends: friendFriends } }, { session });
       await session.commitTransaction();
+      return NextResponse.json(API_Res, Response_Init);
     }
   } catch (err) {
+    await session.abortTransaction();
     let message = "";
     if (err instanceof Error) message = err.message;
     const ErrorValues = Object.values(PossibleErrors);
@@ -169,9 +170,10 @@ export async function PUT(req: NextRequest, res: NextResponse) {
         break;
       }
     }
+    return NextResponse.json(API_Res, Response_Init);
   } finally {
     () => {
-      return NextResponse.json(API_Res, Response_Init);
+      session.endSession();
     };
   }
 }
