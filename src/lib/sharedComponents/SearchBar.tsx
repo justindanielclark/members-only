@@ -7,25 +7,12 @@ type Props = {
   lastSearch: string;
 };
 
-const invalidChars = "'\"\\}]{[:;/?.>,<)(";
-const invalidSearchTerms = new Map<string, boolean>(invalidChars.split("").map((char) => [char, true]));
-const validSearchLength = (term: string): number => {
-  const termChars = term.split("");
-  return termChars.reduce((acc, cur) => {
-    if (invalidSearchTerms.get(cur) === undefined) {
-      acc.push(cur);
-    }
-    return acc;
-  }, [] as Array<string>).length;
-};
-
 export default function SearchBar({ lastSearch }: Props) {
   const [searchTerm, setSearchTerm] = useState(lastSearch);
   const generateSearchURL = (searchTerm: string) => {
     const searchParams = new URLSearchParams();
     searchParams.append("page", "1");
     searchParams.append("query", searchTerm);
-    console.log(`/search?${searchParams.toString()}`);
     return `/search?${searchParams.toString()}`;
   };
   return (
@@ -44,23 +31,13 @@ export default function SearchBar({ lastSearch }: Props) {
             }}
             value={searchTerm}
           />
-          {validSearchLength(searchTerm) > 0 ? (
-            <Link
-              href={generateSearchURL(searchTerm)}
-              role="navigation"
-              className="inline-block sm:w-24 w-full bg-green-800 px-2 py-1"
-            >
-              Search
-            </Link>
-          ) : (
-            <button
-              role="navigation"
-              className="inline-block sm:w-24 w-full bg-green-800 px-2 py-1"
-              onClick={(e) => {}}
-            >
-              Search
-            </button>
-          )}
+          <Link
+            href={generateSearchURL(searchTerm)}
+            role="navigation"
+            className="inline-block sm:w-24 w-full bg-green-800 px-2 py-1"
+          >
+            Search
+          </Link>
         </div>
       </form>
     </SectionContainer>
