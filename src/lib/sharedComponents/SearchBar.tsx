@@ -22,10 +22,11 @@ const validSearchLength = (term: string): number => {
 export default function SearchBar({ lastSearch }: Props) {
   const [searchTerm, setSearchTerm] = useState(lastSearch);
   const generateSearchURL = (searchTerm: string) => {
-    const newURL = new URL(window.location.host);
-    newURL.searchParams.set("page", "1");
-    newURL.searchParams.set("query", searchTerm);
-    return `/search?${newURL.searchParams.toString()}`;
+    const searchParams = new URLSearchParams();
+    searchParams.append("page", "1");
+    searchParams.append("query", searchTerm);
+    console.log(`/search?${searchParams.toString()}`);
+    return `/search?${searchParams.toString()}`;
   };
   return (
     <SectionContainer id="searchBar">
