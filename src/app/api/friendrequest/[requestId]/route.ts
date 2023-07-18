@@ -1,8 +1,7 @@
 import _mongo from "@/lib/mongoDB/_mongo";
-import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(req: NextApiRequest, { params: { requestId } }: { params: { requestId: string } }) {
+export async function DELETE(req: NextRequest, { params: { requestId } }: { params: { requestId: string } }) {
   try {
     await _mongo.friendRequests.deleteFriendRequestByID(requestId);
     const message = "Friend Request Deleted!";
