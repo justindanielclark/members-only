@@ -51,7 +51,7 @@ async function Dashboard() {
       fetchedUserWatchList.forEach((movie) => movieMap.set(movie.id, movie));
       content = (
         <MainContainer>
-          <SearchBar lastSearch="" />
+          <SearchBar />
           <UserContext user={simplifiedUser} movieMap={movieMap}>
             <MovieCardSlider
               title="Today's Top Movies:"

@@ -46,7 +46,7 @@ export default function ValidParamsPage({ confirmedParams, movies, movieMap, use
   })();
   return (
     <>
-      <SearchBar lastSearch={query} />
+      <SearchBar />
       {/* SEARCH RESULTS SUMMARY */}
       <SectionContainer>
         <MainHeader>Search Results for:</MainHeader>
