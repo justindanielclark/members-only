@@ -1,10 +1,10 @@
 "use client";
 import { IconContext } from "@react-icons/all-files";
-import { BsLink } from "@react-icons/all-files/bs/BsLink";
-export default function LinkIcon() {
+import { BiPencil } from "@react-icons/all-files/bi/BiPencil";
+export default function PencilIcon() {
   return (
     <IconContext.Provider value={{ className: "w-6 h-6 inline" }}>
-      <BsLink />
+      <BiPencil />
     </IconContext.Provider>
   );
 }
