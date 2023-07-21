@@ -14,6 +14,8 @@ import removeMovieFromSeenlist from "@/lib/api/removeMovieFromSeenList";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import CopiedToastId from "@/lib/sharedComponents/Toasts/CopiedToast";
+import PencilIcon from "@/lib/sharedComponents/Icons/PencilIcon";
+import Link from "next/link";
 
 type Props = {
   movie: MovieDetails;
@@ -119,7 +121,7 @@ export default function Controls({ movie }: Props) {
     getUserListByName(UserContext.user, "Watched").movies.findIndex((item) => item == movie.id) !== -1;
   return (
     <ul className="max-w-lg mx-auto flex flex-col justify-center items-center flex-nowrap sm:flex-row">
-      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer basis-1/3">
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer basis-1/4">
         <button
           className="p-2 w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
           onClick={handleClickWatchList}
@@ -137,7 +139,7 @@ export default function Controls({ movie }: Props) {
           )}
         </button>
       </li>
-      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 basis-1/3 cursor-pointer">
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 basis-1/4 cursor-pointer">
         <button
           className="p-2 w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
           onClick={handleClickSeenList}
@@ -155,7 +157,7 @@ export default function Controls({ movie }: Props) {
           )}
         </button>
       </li>
-      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 basis-1/3 cursor-pointer">
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 basis-1/4 cursor-pointer">
         <button
           className="p-2 w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
           role="navigation"
@@ -169,6 +171,18 @@ export default function Controls({ movie }: Props) {
             <span className="block px-2">Copy Link To Page</span>
           </>
         </button>
+      </li>
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 basis-1/4 cursor-pointer">
+        <Link
+          href={`/movie/${movie.id}/review`}
+          className="p-2 w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
+          role="navigation"
+        >
+          <>
+            <PencilIcon />
+            <span className="block px-2">Write A Review</span>
+          </>
+        </Link>
       </li>
     </ul>
   );

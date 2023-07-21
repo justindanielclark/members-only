@@ -56,3 +56,12 @@ type FriendWithSharedMoviesInfo = {
   friend: WithId<User>;
   numShared: number;
 };
+
+type MovieReview = {
+  movie: number;
+  user: string;
+  title: string;
+  date: Date;
+  score: number;
+  content: string;
+};
