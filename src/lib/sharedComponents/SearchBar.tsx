@@ -2,20 +2,7 @@
 import { useState } from "react";
 import SectionContainer from "./Containers/SectionContainer";
 import Link from "next/link";
-
-const invalidCharsString = "[({</.,;:'\"`|-_+=*^%$#@&!\\>})] ";
-const invalidChars = new Map<string, true>(invalidCharsString.split("").map((char) => [char, true]));
-
-const hasValidChars = (term: string): boolean => {
-  let result = false;
-  for (let i = 0; i < term.length; i++) {
-    if (invalidChars.get(term.substring(i, i + 1)) == undefined) {
-      result = true;
-      break;
-    }
-  }
-  return result;
-};
+import { hasValidChars, invalidCharsString } from "@/lib/utils/invalidChars";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -28,7 +15,7 @@ export default function SearchBar() {
   };
   return (
     <SectionContainer id="searchBar">
-      <form role="navigation" className="w-full px-4">
+      <div role="navigation" className="w-full px-4">
         <h1 className="text-2xl text-center">
           Millions of movies to discover. <span className="font-bold block sm:inline">Explore now.</span>
         </h1>
@@ -76,7 +63,7 @@ export default function SearchBar() {
             </p>
           ) : undefined}
         </div>
-      </form>
+      </div>
     </SectionContainer>
   );
 }
