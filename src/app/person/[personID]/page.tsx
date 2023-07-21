@@ -49,7 +49,7 @@ export default async function CastPage({ params: { personID } }: Props) {
             />
           </div>
 
-          <div className="flex flex-row flex-nowrap gap-6">
+          <div className="flex md:flex-row flex-col flex-nowrap gap-6">
             {details.birthday ||
             details.deathday ||
             details.known_for_department ||
@@ -115,7 +115,7 @@ export default async function CastPage({ params: { personID } }: Props) {
           </div>
         </section>
         {details.biography !== null && details.biography !== "" ? (
-          <Accordian title="Overview:">
+          <Accordian title="Biography:">
             <div className="py-2">
               {details.biography.split("\n").map((chunk, idx) => (
                 <p className="text-sm indent-4 px-2 py-0.5" key={idx}>
