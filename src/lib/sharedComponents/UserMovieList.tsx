@@ -1,4 +1,3 @@
-"use client";
 import MovieCardSlider from "@/lib/sharedComponents/Containers/MovieCardSlider";
 type Props = {
   emptyRender?: JSX.Element;
