@@ -1,6 +1,7 @@
 import _mongo from "@/lib/mongoDB/_mongo";
 import { NextRequest, NextResponse } from "next/server";
-import { NextURL } from "next/dist/server/web/next-url";
+import { MovieReview } from "../../../../../types/types";
+import { ObjectId } from "mongodb";
 
 type PostParams = {
   params: {
@@ -9,15 +10,39 @@ type PostParams = {
 };
 
 export async function POST(req: NextRequest, { params: { movieID } }: PostParams) {
-  const url = req.nextUrl;
-  const newURL = new NextURL(url.origin);
-  console.log(url);
-  console.log(movieID);
-  const formBody = await req.formData();
-  const movie_title = formBody.get("movie_title");
-  const movie_score = formBody.get("movie_score");
-  const movie_content = formBody.get("movie_content");
+  const data = (await req.json()) as MovieReview;
+  data.date = new Date(data.date);
+  if (!isValidMovieReview(data)) {
+    return NextResponse.json(
+      { message: "User Data Error/Incomplete" },
+      { status: 400, statusText: "User Data Error/Incomplete" }
+    );
+  }
+  try {
+    const existingReview = await _mongo.movieReviews.retrieveMovieReviewByUserIDAndMovieID(data.user, data.movie);
+    if (existingReview) {
+      console.log("existingReview");
+      const updatedReview = await _mongo.movieReviews.updateMovieReview(existingReview._id, data);
+    } else {
+      console.log("new Review");
+      const newReview = await _mongo.movieReviews.createMovieReview(data);
+    }
+  } catch {
+    return NextResponse.json({}, { status: 500, statusText: "Internal Server Error" });
+  }
+  return NextResponse.json({}, { status: 200, statusText: "Review Posted!" });
+}
 
-  console.log(formBody);
-  return NextResponse.redirect(newURL);
+function isValidMovieReview(movieReview: MovieReview): boolean {
+  const { content, date, movie, score, title, user } = movieReview;
+  return !(
+    content == undefined ||
+    date == undefined ||
+    movie == undefined ||
+    score == undefined ||
+    title == undefined ||
+    title == "" ||
+    user == undefined ||
+    !ObjectId.isValid(user)
+  );
 }

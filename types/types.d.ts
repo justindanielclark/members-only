@@ -65,3 +65,6 @@ type MovieReview = {
   score: number;
   content: string;
 };
+
+type MovieReviewDatum = { review: WithId<MovieReview>; user: WithId<User> };
+type MovieReviewData = Array<MovieReviewDatum>;

@@ -28,7 +28,7 @@ export default async function page({ params: { movieID } }: Props) {
     return (
       <>
         <MainContainer>
-          <ReviewForm movie={movie} />
+          <ReviewForm movie={movie} userID={user._id.toString()} />
         </MainContainer>
       </>
     );

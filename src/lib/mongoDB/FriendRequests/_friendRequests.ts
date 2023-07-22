@@ -12,7 +12,7 @@ export async function getFriendRequestsCollection() {
   try {
     return database.collection<FriendRequest>("Friend Requests");
   } catch {
-    throw new Error("Unable to grab Friend Requests collection in getFriendRequests.ts");
+    throw new Error("Unable to grab Friend Requests collection in _friendRequests.ts");
   }
 }
 

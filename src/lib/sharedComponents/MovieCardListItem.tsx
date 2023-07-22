@@ -134,7 +134,7 @@ export default function MovieCard({ movie, priority }: MovieCardProps) {
     }
   }, [MenuContext.selectedID, movie.id]);
   return (
-    <li className="flex flex-col shrink-0 grow-0 w-poster max-w-poster rounded-lg overflow-hidden my-2 select-none">
+    <li className="flex flex-col shrink-0 grow-0 w-poster max-w-poster rounded-lg overflow-hidden my-2 select-none first:ml-4 last:mr-4">
       <div className="relative h-poster">
         <ImageWithFallback
           src={`https://image.tmdb.org/t/p/w185/${movie.poster_path}`}

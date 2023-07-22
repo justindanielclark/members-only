@@ -12,7 +12,7 @@ export default function CastCreditCard({ credit }: Props) {
   const isCastCredit = credit.hasOwnProperty("character");
   const isCrewCredit = credit.hasOwnProperty("jobs");
   return (
-    <Link href={`/person/${credit.id}`} className="shrink-0 grow-0 my-2">
+    <Link href={`/person/${credit.id}`} className="shrink-0 grow-0 my-2 first:ml-4 last:mr-4">
       <article className="bg-black/20 hover:bg-black/30 rounded-lg overflow-hidden drop-shadow-lg max-w-poster">
         <FallbackPersonImage
           profile_path={credit.profile_path}

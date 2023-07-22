@@ -73,7 +73,11 @@ export default function Accordian({ title, children, openOnLoad }: Props) {
         {animationState === "closed" ? <PlusIcon /> : <MinusIcon />}
       </button>
       {/* Display */}
-      <div style={generateStyle(animationState)} ref={panelRef}>
+      <div
+        style={generateStyle(animationState)}
+        className="border-r-2 border-l-2 border-r-slate-600/20 border-l-slate-600/20 last:border-b-slate-600/20 last:border-b-2"
+        ref={panelRef}
+      >
         {children}
       </div>
     </section>

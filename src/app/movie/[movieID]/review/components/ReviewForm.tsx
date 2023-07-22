@@ -2,7 +2,13 @@
 import { FormEvent } from "react";
 import { useState } from "react";
 import Link from "next/link";
+import addMovieReview from "@/lib/api/addMovieReview";
+import { MovieReview } from "../../../../../../types/types";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { invalidCharsString } from "@/lib/utils/invalidChars";
 type Props = {
+  userID: string;
   movie: MovieDetails;
 };
 type OptionValue = {
@@ -23,17 +29,52 @@ const optionValues: Array<OptionValue> = [
   { value: "5", text: "★★★★★" },
 ];
 
-export default function ReviewForm({ movie }: Props) {
+export default function ReviewForm({ userID, movie }: Props) {
   const [reviewTitle, setReviewTitle] = useState<string>("");
   const [reviewScore, setReviewScore] = useState<string>("2.5");
   const [reviewContent, setReviewContent] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isDisplayingWarning, setIsDisplayingWarning] = useState<boolean>(false);
+  const router = useRouter();
 
   const isSubmittable = (reviewTitle: string, reviewContent: string): boolean => {
     return reviewTitle.length >= 5 && reviewContent.length >= 5;
   };
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmittable(reviewTitle, reviewContent)) {
+      const review: MovieReview = {
+        content: reviewContent,
+        date: new Date(),
+        movie: movie.id,
+        score: parseFloat(reviewScore),
+        title: reviewTitle,
+        user: userID,
+      };
+      setIsSubmitting(true);
+      const promise = addMovieReview(review)
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error("Unable to Complete Add Movie Review");
+          }
+        })
+        .then(() => {
+          router.push(`/movie/${movie.id}`);
+        })
+        .catch((err) => {
+          setIsSubmitting(false);
+        });
+      toast.promise(promise, {
+        pending: <p>Adding Review to Database...</p>,
+        success: <p>Review Added</p>,
+        error: (
+          <div>
+            <p>There was an error with adding the review.</p>
+            <p>Please Try again Later</p>
+          </div>
+        ),
+      });
+    }
   };
   return (
     <div className="mx-auto max-w-lg">
@@ -97,7 +138,18 @@ export default function ReviewForm({ movie }: Props) {
             }}
           ></textarea>
         </div>
-        <button className="w-24 bg-green-800 py-1 text-center rounded-lg">Submit</button>
+        <div className="text-xs w-full p-2">
+          <p className="font-bold underline underline-offset-2">A valid review submission has:</p>
+          <ul className="list-disc pl-4">
+            <li>A title that is at least 5 valid characters</li>
+            <li>Content comprised of at least 20 valid characters</li>
+          </ul>
+          <p>Invalid Chars are the following: {invalidCharsString.split("").join(" ")}</p>
+        </div>
+
+        <button className="bg-green-800 px-2 py-1 text-center rounded-lg">
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </button>
       </form>
     </div>
   );
