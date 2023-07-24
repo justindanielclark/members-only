@@ -7,27 +7,12 @@ import { MovieReview } from "../../../../../../types/types";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { invalidCharsString } from "@/lib/utils/invalidChars";
+import { reviewValues } from "@/lib/utils/reviewValues";
+
 type Props = {
   userID: string;
   movie: MovieDetails;
 };
-type OptionValue = {
-  value: string;
-  text: string;
-};
-const optionValues: Array<OptionValue> = [
-  { value: "0", text: "☆☆☆☆☆" },
-  { value: ".5", text: "✬☆☆☆☆" },
-  { value: "1", text: "★☆☆☆☆" },
-  { value: "1.5", text: "★✬☆☆☆" },
-  { value: "2", text: "★★☆☆☆" },
-  { value: "2.5", text: "★★✬☆☆" },
-  { value: "3", text: "★★★☆☆" },
-  { value: "3.5", text: "★★★✬☆" },
-  { value: "4", text: "★★★★☆" },
-  { value: "4.5", text: "★★★★✬" },
-  { value: "5", text: "★★★★★" },
-];
 
 export default function ReviewForm({ userID, movie }: Props) {
   const [reviewTitle, setReviewTitle] = useState<string>("");
@@ -111,7 +96,7 @@ export default function ReviewForm({ userID, movie }: Props) {
             defaultValue={"2.5"}
             value={reviewScore}
           >
-            {optionValues.map((entry) => (
+            {reviewValues.map((entry) => (
               <option value={entry.value} key={entry.value}>
                 {entry.text}
               </option>
