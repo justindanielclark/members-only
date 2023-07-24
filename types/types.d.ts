@@ -66,5 +66,10 @@ type MovieReview = {
   content: string;
 };
 
+type API_Response<T> = {
+  message: string;
+  data?: T;
+};
+
 type MovieReviewDatum = { review: WithId<MovieReview>; user: WithId<User> };
 type MovieReviewData = Array<MovieReviewDatum>;
