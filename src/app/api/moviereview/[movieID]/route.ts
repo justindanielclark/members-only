@@ -1,15 +1,34 @@
 import _mongo from "@/lib/mongoDB/_mongo";
 import { NextRequest, NextResponse } from "next/server";
-import { MovieReview } from "../../../../../types/types";
-import { ObjectId } from "mongodb";
+import { API_Response, MovieReview } from "../../../../../types/types";
+import { ObjectId, WithId } from "mongodb";
 
-type PostParams = {
+type API_Params = {
   params: {
     movieID: string;
   };
 };
 
-export async function POST(req: NextRequest, { params: { movieID } }: PostParams) {
+export async function GET(
+  req: NextRequest,
+  { params: { movieID } }: API_Params
+): Promise<NextResponse<API_Response<Array<WithId<MovieReview>>>>> {
+  const id = parseInt(movieID);
+  if (Number.isNaN(id)) {
+    const message = "Submitted MovieID must be a Int Number";
+    return NextResponse.json({ message: message, data: undefined }, { status: 400, statusText: message });
+  }
+  try {
+    const results = await _mongo.movieReviews.retriveAllMovieReviewsByMovieID(id);
+    const message = "Request Complete!";
+    return NextResponse.json({ message: message, data: results }, { status: 200, statusText: message });
+  } catch {
+    const message = "Internal Server Error. Please Try Again Later...";
+    return NextResponse.json({ message: message, data: undefined }, { status: 500, statusText: message });
+  }
+}
+
+export async function POST(req: NextRequest, { params: { movieID } }: API_Params) {
   const data = (await req.json()) as MovieReview;
   data.date = new Date(data.date);
   if (!isValidMovieReview(data)) {
