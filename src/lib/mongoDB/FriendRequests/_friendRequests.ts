@@ -2,6 +2,7 @@ import { FriendRequest } from "../../../../types/types";
 import getMovieDatabaseCollection from "../getMovieDatabaseCollection";
 import createFriendRequest from "./createFriendRequest";
 import retrieveFriendRequestByRequestId from "./retrieveFriendRequestByRequestId";
+import retrieveFriendRequestByIDs from "./retrieveFriendRequestByIDs";
 import retrieveFriendRequestsByID from "./retrieveFriendRequestsByID";
 import retrieveSpecificFriendRequest from "./retrieveSpecificFriendRequest";
 import deleteFriendRequest from "./deleteFriendRequest";
@@ -20,6 +21,7 @@ const exportable = {
   createFriendRequest,
   retrieveFriendRequestByRequestId,
   retrieveFriendRequestsByID,
+  retrieveFriendRequestByIDs,
   retrieveSpecificFriendRequest,
   deleteFriendRequest,
   deleteFriendRequestByID,
