@@ -1,3 +1,4 @@
+"use client";
 import SearchBar from "@/lib/sharedComponents/SearchBar";
 import SectionContainer from "@/lib/sharedComponents/Containers/SectionContainer";
 import MainHeader from "@/lib/sharedComponents/Headers/MainHeader";
@@ -29,17 +30,22 @@ export default function ValidParamsPage({ confirmedParams, movies, movieMap, use
     const upperLimit = Math.min(movies.total_pages, confirmedParams.page + PAGINATION_SPREAD);
     const content = [];
     for (let i = lowerLimit; i <= upperLimit; i++) {
+      const ref = `/search?page=${i}&query=${encodeURIComponent(confirmedParams.query)}`;
       content.push(
-        <Link
-          href={`/search?page=${i}&query=${encodeURIComponent(confirmedParams.query)}`}
-          scroll={true}
-          className={`p-1${i === confirmedParams.page ? " font-bold text-[#FFFF00]" : ""}`}
+        <a
+          key={ref}
+          className={`px-2 py-1 rounded-lg cursor-pointer hover:bg-slate-900/30${
+            i === confirmedParams.page ? " font-bold text-[#FFFF00]" : ""
+          }`}
+          onClick={() => {
+            window.location.href = ref;
+          }}
         >
           {i}
-        </Link>
+        </a>
       );
       if (i < upperLimit) {
-        content.push(<span className="p-1">{`/`}</span>);
+        content.push(<span key={"slash-" + ref} className="p-1">{`/`}</span>);
       }
     }
     return <section className="w-full flex flex-row justify-center mb-4">{content}</section>;
@@ -50,7 +56,9 @@ export default function ValidParamsPage({ confirmedParams, movies, movieMap, use
       {/* SEARCH RESULTS SUMMARY */}
       <SectionContainer>
         <MainHeader>Search Results for:</MainHeader>
-        <p className="font-bold text-xl p-2">{query}</p>
+        <p key={confirmedParams.page} className="font-bold text-xl p-2">
+          {query}
+        </p>
         <div className="flex flex-col text-xs justify-end">
           <p className="text-right">{movies.total_results} Results</p>
           {movies.total_results > 0 && page > 0 && page <= movies.total_pages ? (
