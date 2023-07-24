@@ -51,11 +51,11 @@ export default async function MoviePage({ params: { movieID } }: Props) {
     notFound();
   }
   const [fetchedMovie, fetchedCredits, fetchedRecommendations, reviews, user] = await Promise.all([
-    getMovieDetails(id),
-    getMovieCredits(id),
-    getMovieRecommendations(id),
-    _mongo.movieReviews.retriveAllMovieReviewsByMovieID(id),
-    _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string),
+    getMovieDetails(id), //Fetch to TMBD
+    getMovieCredits(id), //Fetch to TMBD
+    getMovieRecommendations(id), //Fetch to TMBD
+    _mongo.movieReviews.retriveAllMovieReviewsByMovieID(id), // MongoAtlas Request
+    _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string), // MongoAtlas Request
   ]);
   if (user) {
     if (!fetchedMovie.hasOwnProperty("message")) {
