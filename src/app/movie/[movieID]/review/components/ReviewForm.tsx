@@ -57,22 +57,18 @@ export default function ReviewForm({ userID, movie }: Props) {
           if (!res.ok) {
             throw new Error("Unable to Complete Add Movie Review");
           }
+          return;
         })
         .then(() => {
-          router.push(`/movie/${movie.id}`);
+          window.location.href = `/movie/${movie.id}`;
         })
         .catch((err) => {
           setIsSubmitting(false);
         });
       toast.promise(promise, {
-        pending: <p>Adding Review to Database...</p>,
-        success: <p>Review Added</p>,
-        error: (
-          <div>
-            <p>There was an error with adding the review.</p>
-            <p>Please Try again Later</p>
-          </div>
-        ),
+        pending: "Adding Review to Database...",
+        success: "Review Added",
+        error: "There Was An Error With Adding the Review",
       });
     }
   };

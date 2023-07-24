@@ -18,7 +18,7 @@ export default function Reviews({ data }: Props) {
   }
   return (
     <Accordian title="Reviews" openOnLoad={false}>
-      <ul className="p-4 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 [&>*:nth-child(7n+1)]:bg-slate-950/10 [&>*:nth-child(7n+2)]:bg-slate-950/20 [&>*:nth-child(7n+3)]:bg-slate-950/30 [&>*:nth-child(7n+4)]:bg-slate-950/40 [&>*:nth-child(7n+5)]:bg-slate-950/30 [&>*:nth-child(7n+6)]:bg-slate-950/20 [&>*:nth-child(7n+7)]:bg-slate-950/10">
+      <ul className="p-4 grid lg:grid-cols-2 grid-cols-1 [&>*:nth-child(7n+1)]:bg-slate-950/10 [&>*:nth-child(7n+2)]:bg-slate-950/20 [&>*:nth-child(7n+3)]:bg-slate-950/30 [&>*:nth-child(7n+4)]:bg-slate-950/40 [&>*:nth-child(7n+5)]:bg-slate-950/30 [&>*:nth-child(7n+6)]:bg-slate-950/20 [&>*:nth-child(7n+7)]:bg-slate-950/10">
         {data.map((datum) => (
           <Review key={datum.review._id.toString()} datum={datum} />
         ))}
@@ -48,12 +48,12 @@ function Review({ datum }: ReviewProps) {
         />
         <div>
           <h2 className="text-xl font-bold">{datum.review.title}</h2>
-          <p className="text-xs">
-            {datum.user.handle} - {datum.review.date.toDateString()}
+          <p className="text-xs p-2">
+            {datum.user.handle} - {new Date(datum.review.date).toDateString()}
           </p>
         </div>
       </Link>
-      <p className="py-2 text-sm">{datum.review.content}</p>
+      <p className="py-3 px-2 text-sm">{datum.review.content}</p>
     </li>
   );
 }
