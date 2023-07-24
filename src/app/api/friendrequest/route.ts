@@ -84,10 +84,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
           statusText: "Friend Added!",
         };
       } else {
-        await _mongo.friendRequests.createFriendRequest(senderUserID, receiverUserID);
+        const result = await _mongo.friendRequests.createFriendRequest(senderUserID, receiverUserID);
         API_Res = {
           message: "Success",
-          data: { message: "Friend Request Created!" },
+          data: { message: "Friend Request Created!", data: result.insertedId.toString() },
         };
         Response_Init = {
           status: 200,
