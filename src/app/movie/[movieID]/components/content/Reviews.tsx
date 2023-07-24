@@ -2,6 +2,7 @@ import Accordian from "@/lib/sharedComponents/Containers/Accordian";
 import { MovieReviewData, MovieReviewDatum } from "../../../../../../types/types";
 import ImageWithFallback from "@/lib/sharedComponents/FallbackImage";
 import Link from "next/link";
+import { reviewValues } from "@/lib/utils/reviewValues";
 type Props = {
   data: MovieReviewData;
 };
@@ -48,8 +49,15 @@ function Review({ datum }: ReviewProps) {
         />
         <div>
           <h2 className="text-xl font-bold">{datum.review.title}</h2>
-          <p className="text-xs p-2">
+          <p className="text-xs">
             {datum.user.handle} - {new Date(datum.review.date).toDateString()}
+          </p>
+          <p className="text-xs">
+            {
+              reviewValues.find((val) => {
+                return val.value == datum.review.score.toString();
+              })?.text
+            }
           </p>
         </div>
       </Link>
