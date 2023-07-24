@@ -11,6 +11,8 @@ import UserContext from "@/lib/providers/UserProvider";
 import UserMovieList from "@/lib/sharedComponents/UserMovieList";
 import SectionContainer from "@/lib/sharedComponents/Containers/SectionContainer";
 import SubHeader from "@/lib/sharedComponents/Headers/SubHeader";
+import Controls from "./components/Controls";
+import { FriendType } from "@/lib/utils/friendTypes";
 
 type Props = {
   params: {
@@ -33,9 +35,31 @@ export default async function profilePage({ params: { profileID } }: Props) {
       return notFound();
     }
     if (user && profile) {
-      if (user._id.toString() === profile._id.toString()) {
+      const userID = user._id.toString();
+      const profileID = profile._id.toString();
+      if (userID === profileID) {
         return redirect("/profile");
       }
+
+      //Figure Out If User / Profile are Friends or have a pending request
+      let friendType: FriendType = "not-friends";
+      let requestID: string | undefined;
+      if (user.friends.includes(profileID)) {
+        friendType = "friends";
+      } else {
+        const [outgoing, incoming] = await Promise.all([
+          _mongo.friendRequests.retrieveFriendRequestByIDs(userID, profileID),
+          _mongo.friendRequests.retrieveFriendRequestByIDs(profileID, userID),
+        ]);
+        if (outgoing) {
+          friendType = "request-sent";
+          requestID = outgoing._id.toString();
+        } else if (incoming) {
+          friendType = "request-pending";
+          requestID = incoming._id.toString();
+        }
+      }
+
       const userList = getUserListByName(user, "Watch List").movies;
       const profileList = getUserListByName(profile, "Watch List").movies;
       const uniqueMovies = new Map<number, boolean>();
@@ -73,21 +97,25 @@ export default async function profilePage({ params: { profileID } }: Props) {
 
       content = (
         <MainContainer>
-          <div className="flex flex-row gap-4 items-center border-b-2 border-white p-4">
-            <ImageWithFallback
-              src={profile.photoPath}
-              width={40}
-              height={40}
-              alt="User Profile Photo"
-              crossOrigin=""
-              priority={true}
-              className="rounded-lg h-20 max-h-20 w-20 max-w-20"
-            />
-            <h1 className="text-3xl font-bold">
-              {profile.handle}
-              {"'s Profile"}
-            </h1>
+          <div className="flex flex-row gap-4 border-b-2 border-white items-center justify-between">
+            <div className="flex flex-row gap-4 items-center p-4">
+              <ImageWithFallback
+                src={profile.photoPath}
+                width={40}
+                height={40}
+                alt="User Profile Photo"
+                crossOrigin=""
+                priority={true}
+                className="rounded-lg h-20 max-h-20 w-20 max-w-20"
+              />
+              <h1 className="text-3xl font-bold">
+                {profile.handle}
+                {"'s Profile"}
+              </h1>
+            </div>
+            <Controls friendStatus={friendType} userID={userID} profileID={profileID} friendRequestID={requestID} />
           </div>
+
           {profile.aboutMe.length > 0 ? (
             <SectionContainer>
               <SubHeader>About Me:</SubHeader>

@@ -38,4 +38,5 @@ type FriendRequest_PostRequest = {
 
 type simpleMessage = {
   message: string;
+  data?: any;
 };
