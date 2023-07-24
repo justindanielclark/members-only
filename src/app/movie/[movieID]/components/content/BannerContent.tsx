@@ -73,10 +73,12 @@ export default function BannerContent({ movie }: Props) {
             </div>
           ) : undefined}
           {movie.homepage && movie.homepage !== "" ? (
-            <Link className="hover:underline" href={movie.homepage} rel="noopener noreferrer" target="_blank">
-              <LinkIcon />
-              <span className="ml-2">Visit Movie Homepage</span>
-            </Link>
+            <div>
+              <Link className="hover:underline" href={movie.homepage} rel="noopener noreferrer" target="_blank">
+                <LinkIcon />
+                <span className="ml-2 py-1">Visit Movie Homepage</span>
+              </Link>
+            </div>
           ) : undefined}
           {/* Status, Lang, Budget, Revenue */}
           <div className="flex flex-row gap-4 mt-4 justify-end">
