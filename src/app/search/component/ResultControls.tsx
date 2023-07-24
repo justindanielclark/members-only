@@ -120,10 +120,10 @@ export default function ResultControls({ movie }: Props) {
   };
 
   return (
-    <ul className="flex flex-row justify-center items-center flex-wrap w-full bg-slate-900">
-      <li className="p-1 text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer rounded-lg flex-1 basis-1/2 sm:basis-1/4">
+    <ul className="flex flex-row justify-center flex-wrap w-full bg-slate-900">
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer flex-1 basis-1/2 sm:basis-1/4">
         <Link href={`/movie/${movie.id}`}>
-          <button className="w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center">
+          <button className="w-full p-1 h-fit text-left flex flex-row flex-nowrap items-center justify-center">
             <>
               <LinkIcon />
               <span className="block px-2 text-xs">Visit Page</span>
@@ -131,9 +131,9 @@ export default function ResultControls({ movie }: Props) {
           </button>
         </Link>
       </li>
-      <li className="p-1 text-sm whitespace-nowrap hover:bg-slate-300/10 rounded-lg cursor-pointer flex-1 basis-1/2 sm:basis-1/4">
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer flex-1 basis-1/2 sm:basis-1/4">
         <button
-          className="w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
+          className="p-1 w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
           role="navigation"
           onClick={() => {
             navigator.clipboard.writeText(`${window.location.host}/movie/${movie.id}`);
@@ -146,9 +146,9 @@ export default function ResultControls({ movie }: Props) {
           </>
         </button>
       </li>
-      <li className="p-1 text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer rounded-lg flex-1 basis-1/2 sm:basis-1/4">
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer flex-1 basis-1/2 sm:basis-1/4">
         <button
-          className="w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
+          className="p-1 w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
           onClick={handleClickWatchList}
         >
           {isOnWatchList ? (
@@ -164,9 +164,9 @@ export default function ResultControls({ movie }: Props) {
           )}
         </button>
       </li>
-      <li className="p-1 text-sm whitespace-nowrap hover:bg-slate-300/10 rounded-lg cursor-pointer flex-1 basis-1/2 sm:basis-1/4">
+      <li className="text-sm whitespace-nowrap hover:bg-slate-300/10 cursor-pointer flex-1 basis-1/2 sm:basis-1/4">
         <button
-          className="w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
+          className="p-1 w-full h-fit text-left flex flex-row flex-nowrap items-center justify-center"
           onClick={handleClickSeenList}
         >
           {isOnSeenList ? (
