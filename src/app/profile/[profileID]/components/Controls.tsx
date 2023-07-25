@@ -82,7 +82,7 @@ export default function Controls({ friendStatus, userID, profileID, friendReques
     }
   };
   const handleDeleteFriend = () => {
-    if (friendType !== "transitioning" && typeof requestID == "string") {
+    if (friendType !== "transitioning") {
       setFriendType("transitioning");
       const promise = removeFriend({ friendID: userID, requestorID: profileID })
         .then((res) => {
@@ -108,7 +108,7 @@ export default function Controls({ friendStatus, userID, profileID, friendReques
       case "friends": {
         return (
           <div>
-            <button className="px-2 py-1 rounded-lg bg-red-900" onClick={handleDeleteFriend}>
+            <button className="whitespace-nowrap px-2 py-1 rounded-lg bg-red-900" onClick={handleDeleteFriend}>
               Remove Friend
             </button>
           </div>
@@ -117,7 +117,7 @@ export default function Controls({ friendStatus, userID, profileID, friendReques
       case "not-friends": {
         return (
           <div>
-            <button className="px-2 py-1 rounded-lg bg-green-900" onClick={handleSendFriendRequest}>
+            <button className="whitespace-nowrap px-2 py-1 rounded-lg bg-green-900" onClick={handleSendFriendRequest}>
               Send Friend Request
             </button>
           </div>
@@ -126,7 +126,7 @@ export default function Controls({ friendStatus, userID, profileID, friendReques
       case "request-pending": {
         return (
           <div>
-            <button className="px-2 py-1 rounded-lg bg-green-900" onClick={handleAddFriend}>
+            <button className="whitespace-nowrap px-2 py-1 rounded-lg bg-green-900" onClick={handleAddFriend}>
               Accept Friend Request
             </button>
           </div>
@@ -135,7 +135,7 @@ export default function Controls({ friendStatus, userID, profileID, friendReques
       case "request-sent": {
         return (
           <div>
-            <button className="px-2 py-1 rounded-lg bg-red-900" onClick={handleRetractFriendRequest}>
+            <button className="whitespace-nowrap px-2 py-1 rounded-lg bg-red-900" onClick={handleRetractFriendRequest}>
               Retract Friend Request
             </button>
           </div>

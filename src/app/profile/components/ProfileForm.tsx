@@ -96,7 +96,7 @@ export default function ProfileForm({ user, provider, imgsrc, userID }: Props) {
             alt="User Profile Photo"
             crossOrigin=""
             priority={true}
-            className="rounded-lg h-10 max-h-10 w-10 max-w-10"
+            className="rounded-lg h-10 max-h-10 w-10 max-w-10 border-white border"
           />
         </div>
         <div className="flex flex-col">

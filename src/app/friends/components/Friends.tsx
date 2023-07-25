@@ -43,7 +43,7 @@ function Friend({ userID, friend, numShared }: FriendProps) {
         alt={`${friend.handle} Profile Photo`}
         crossOrigin=""
         priority={true}
-        className="rounded-lg h-8 max-h-8 w-8 max-w-8"
+        className="rounded-lg h-8 max-h-8 w-8 max-w-8 border-white border"
       />
       <div className="flex sm:flex-row flex-col px-2">
         {/* Name and Info */}
