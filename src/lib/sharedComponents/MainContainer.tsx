@@ -13,7 +13,7 @@ export default function MainContainer({ children, className }: Props) {
   }
   return (
     <main className={mainContainerDefaultClasses}>
-      <div className={"max-w-3xl lg:max-w-6xl mx-auto p-4" + " " + containerClasses.join(" ")}>{children}</div>
+      <div className={"max-w-6xl mx-auto p-4" + " " + containerClasses.join(" ")}>{children}</div>
     </main>
   );
 }
