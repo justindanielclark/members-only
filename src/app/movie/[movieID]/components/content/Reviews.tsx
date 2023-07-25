@@ -18,7 +18,7 @@ export default function Reviews({ data }: Props) {
     );
   }
   return (
-    <Accordian title="Reviews" openOnLoad={false}>
+    <Accordian title={`Reviews (${data.length})`} openOnLoad={false}>
       <ul className="p-4 grid lg:grid-cols-2 grid-cols-1 [&>*:nth-child(7n+1)]:bg-slate-950/10 [&>*:nth-child(7n+2)]:bg-slate-950/20 [&>*:nth-child(7n+3)]:bg-slate-950/30 [&>*:nth-child(7n+4)]:bg-slate-950/40 [&>*:nth-child(7n+5)]:bg-slate-950/30 [&>*:nth-child(7n+6)]:bg-slate-950/20 [&>*:nth-child(7n+7)]:bg-slate-950/10">
         {data.map((datum) => (
           <Review key={datum.review._id.toString()} datum={datum} />
@@ -45,7 +45,7 @@ function Review({ datum }: ReviewProps) {
           alt={`${datum.user.handle} profile photo`}
           crossOrigin=""
           priority={true}
-          className="rounded-lg h-10 max-h-10 w-10 max-w-10"
+          className="rounded-lg h-10 max-h-10 w-10 max-w-10 border-white border"
         />
         <div>
           <h2 className="text-xl font-bold">{datum.review.title}</h2>
