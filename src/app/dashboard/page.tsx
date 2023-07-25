@@ -32,23 +32,51 @@ async function Dashboard() {
       _mongo.user.retrieveUser(session.user.email as string, session.user.provider as string),
     ]);
     if (user) {
-      //MovieMap Loaded With Every Fetched Popular Movie
+      //MovieMap - Repo for All Fetched Movies By MovieID
       const movieMap = new Map<number, FetchedMovie>();
+      //userMovieMap - A Map for Comparisons of User Watch List Movies
+      const userMovieMap = new Map<number, boolean>();
+      //sharedMoviesMap - A Map of What You and Your Friends Both Want To See
+      const sharedMoviesMap = new Map<number, Array<string>>();
       movies.forEach((movie) => movieMap.set(movie.id, movie));
-      //Split out the _id from the user, create a simplified user object
       const { _id, ...simplifiedUser } = user;
-      //Take the user's watch list and pull out any movie id's we've already requested in PopularMovies
       const simpUserWatchList = getUserListByName(simplifiedUser, "Watch List");
+      simpUserWatchList.movies.forEach((movie) => {
+        userMovieMap.set(movie, true);
+      });
       const reducedSimpUserWatchList = [...simpUserWatchList.movies].reduce((acc, cur) => {
         if (!movieMap.get(cur)) {
           acc.push(cur);
         }
         return acc;
       }, [] as Array<number>);
-      //Request the movies we haven't already requested
       const fetchedUserWatchList = await getAllMovies(reducedSimpUserWatchList);
-      //Once we have them, add them into the movieMap for the dashboard
       fetchedUserWatchList.forEach((movie) => movieMap.set(movie.id, movie));
+      const friends = await Promise.all(user.friends.map((friendID) => _mongo.user.retrieveUserByID(friendID)));
+      friends.forEach((friend) => {
+        if (friend) {
+          const friendList = getUserListByName(friend, "Watch List");
+          friendList.movies.forEach((movie) => {
+            if (userMovieMap.get(movie)) {
+              const mapEntry = sharedMoviesMap.get(movie);
+              if (mapEntry) {
+                mapEntry.push(friend._id.toString());
+              } else {
+                sharedMoviesMap.set(movie, [friend._id.toString()]);
+              }
+            }
+          });
+        }
+      });
+      const sortedReducedSharedMoviesArray = Array.from(sharedMoviesMap)
+        .sort((a, b) => {
+          return a.length - b.length;
+        })
+        .reduce((acc, cur) => {
+          acc.push(cur[0]);
+          return acc;
+        }, [] as Array<number>);
+
       content = (
         <MainContainer>
           <SearchBar />
@@ -67,6 +95,11 @@ async function Dashboard() {
                 "This is currently empty. You'll need to add movies to your watchlist to fill this out."
               )}
               listTitle="Your Watchlist:"
+            />
+            <UserMovieList
+              list={sortedReducedSharedMoviesArray}
+              emptyRender={undefined}
+              listTitle="Movies You and Your Friends Want to See:"
             />
           </UserContext>
         </MainContainer>

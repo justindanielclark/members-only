@@ -94,11 +94,12 @@ export default async function profilePage({ params: { profileID } }: Props) {
       uniqueMoviesArray.forEach((movie) => {
         movieMap.set(movie.id, movie);
       });
+      const { _id, ...simplifiedUser } = user;
 
       content = (
         <MainContainer>
-          <div className="flex flex-row gap-4 border-b-2 border-white items-center justify-between">
-            <div className="flex flex-row gap-4 items-center p-4">
+          <div className="flex sm:flex-row flex-col gap-4 border-b-2 border-white sm:items-center items-end justify-between p-4">
+            <div className="flex flex-row gap-4 items-center w-full">
               <ImageWithFallback
                 src={profile.photoPath}
                 width={40}
@@ -106,7 +107,7 @@ export default async function profilePage({ params: { profileID } }: Props) {
                 alt="User Profile Photo"
                 crossOrigin=""
                 priority={true}
-                className="rounded-lg h-20 max-h-20 w-20 max-w-20"
+                className="rounded-lg h-20 max-h-20 w-20 max-w-20 border-white border"
               />
               <h1 className="text-3xl font-bold">
                 {profile.handle}
@@ -123,12 +124,12 @@ export default async function profilePage({ params: { profileID } }: Props) {
             </SectionContainer>
           ) : undefined}
           {profileList.length > 0 ? (
-            <UserContext movieMap={movieMap} user={user}>
+            <UserContext movieMap={movieMap} user={simplifiedUser}>
               <UserMovieList listTitle={`${profile.handle}'s Watch List`} list={profileList} />
             </UserContext>
           ) : undefined}
           {sharedMovies.length > 0 ? (
-            <UserContext movieMap={movieMap} user={user}>
+            <UserContext movieMap={movieMap} user={simplifiedUser}>
               <UserMovieList listTitle="Common Watch List Movies" list={sharedMovies} />
             </UserContext>
           ) : undefined}

@@ -15,6 +15,8 @@ import Recommendations from "./components/content/Recommendations";
 import { MovieReviewData, User } from "../../../../types/types";
 import { WithId } from "mongodb";
 import Reviews from "./components/content/Reviews";
+import { getUserListByName } from "@/lib/utils/getUserListByName";
+import FriendsWhoWantToSeeThisMovie from "./components/content/FriendsWhoWantToSeeThisMovie";
 
 type Props = {
   params: {
@@ -65,11 +67,38 @@ export default async function MoviePage({ params: { movieID } }: Props) {
       const { cast, crew } = fetchedCredits as Cast;
       const reducedCrew = reduceCrew(crew);
       fetchedRecommendations.forEach((m) => movieMap.set(movie.id, m));
-      const reviewers = await Promise.all(
-        reviews.map((review) => {
-          return _mongo.user.retrieveUserByID(review.user);
+      //Fetch all users and reviewers data
+      const [friends, reviewers] = await Promise.all([
+        Promise.all(
+          simplifiedUser.friends.map((friend) => {
+            return _mongo.user.retrieveUserByID(friend);
+          })
+        ),
+        Promise.all(
+          reviews.map((review) => {
+            return _mongo.user.retrieveUserByID(review.user);
+          })
+        ),
+      ]);
+
+      const friendsWhoShareTheMovieInWatchList = friends
+        .filter((friend) => {
+          if (friend) {
+            let found = false;
+            getUserListByName(friend, "Watch List").movies.forEach((movie) => {
+              if (movie === id) {
+                found = true;
+              }
+            });
+            return found;
+          }
+          return false;
         })
-      );
+        .sort((a, b) => {
+          //null case handled above, assertations below ignore ts-lint being stupid
+          return (a as WithId<User>).handle.localeCompare((b as WithId<User>).handle);
+        }) as Array<WithId<User>>;
+
       const reviewerMap = new Map<string, WithId<User>>();
       reviewers.forEach((reviewer) => {
         if (reviewer) {
@@ -92,6 +121,7 @@ export default async function MoviePage({ params: { movieID } }: Props) {
             <SubMainContainer className="px-4 py-4 flex flex-col">
               <CastAndCrew cast={cast} crew={reducedCrew} movie={movie} />
               <Recommendations movies={fetchedRecommendations} />
+              <FriendsWhoWantToSeeThisMovie friends={friendsWhoShareTheMovieInWatchList} />
               <Reviews data={reviewData} />
             </SubMainContainer>
           </UserContext>
