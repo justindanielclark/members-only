@@ -113,6 +113,8 @@ export default function ProfileForm({ user, provider, imgsrc, userID }: Props) {
             className="text-black p-2 my-2"
             value={handle}
             onChange={handleInputChange}
+            min={3}
+            max={20}
           />
           <p
             className={`text-xs flex-1 text-right sm:whitespace-nowrap ${
@@ -138,6 +140,7 @@ export default function ProfileForm({ user, provider, imgsrc, userID }: Props) {
             className="text-black p-2 my-2"
             value={aboutMe}
             onChange={handleTextAreaChange}
+            maxLength={200}
           />
           <p
             className={`text-xs flex-1 text-right sm:whitespace-nowrap ${
